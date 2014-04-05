@@ -2,6 +2,13 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         connect: {
+            server: {
+                options: {
+                    port: 8889,
+                    basee: '.',
+                    host: 'localhost'
+                }
+            },
             test: {
                 options: {
                     port: 8888
@@ -13,6 +20,7 @@ module.exports = function(grunt) {
                 src: 'src/**/*.js',
                 options: {
                     outfile: 'SpecRunner.html',
+                    keepRunner: true,
                     specs: 'test/spec/**/*.js',
                     host: 'http://localhost:<%= connect.test.options.port%>',
                     template: require('grunt-template-jasmine-requirejs'),
@@ -32,5 +40,6 @@ module.exports = function(grunt) {
     // grunt.loadNpmTasks('grunt-template-jasmine-requirejs');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
 
+    grunt.registerTask('server', ['connect:server:keepalive']);
     grunt.registerTask('test', ['connect:test', 'jasmine:requirejs']);
 };
