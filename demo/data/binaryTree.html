@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+
+        <title>BinaryTree</title>
+    </head>
+    <body>
+        <script src="http://cdn.bootcss.com/require.js/2.1.11/require.js"></script>
+        <script type="text/javascript">
+            require(['../../src/data/BinaryTree'], function(BinaryTree) {
+                var binaryTree = new BinaryTree();
+                var data = [3, 5, 6, 1, 2, 10, 9, 8]; 
+                for(var i = 0, len = data.length; i < len; i++) {
+                    binaryTree.insert(data[i]);
+                }
+                console.log(binaryTree.xxbl());
+            });
+        </script>
+    </body>
+</html>
