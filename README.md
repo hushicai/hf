@@ -6,10 +6,5 @@ Just some javascript code
 
 ```bash
 npm install
-```
-
-Then:
-
-```bash
 grunt test
 ```
