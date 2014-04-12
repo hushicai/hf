@@ -11,7 +11,7 @@
                  throw new Error('level、order参数都从1开始！');
              }
 
-             return Math.pow(2, level - 1) - 1 + order - 1;
+             return Math.pow(2, level - 1) + order - 2;
          }
 
          // 初始化时，得到的二叉树是一颗完全二叉树
@@ -55,14 +55,11 @@
 
          // 获取根节点
          SqBinaryTree.prototype.getRoot = function() {
-             if (this.isEmptyTree()) {
-                 return null;
-             }
-
              return this.nodes[0];
          }
 
          // level、order都从1开始
+         // 返回指定位置的节点
          SqBinaryTree.prototype.getNode = function(level, order) {
              var idx = smf(level, order);
 
@@ -121,11 +118,8 @@
              }
          }
 
-         // 子节点
+         // 返回一个节点的左孩子节点
          SqBinaryTree.prototype.leftChild = function(value) {
-             if (this.isEmptyTree()) {
-                 return;
-             }
              for(var i = 0, len = this.nodes.length; i < len; i++) {
                  if (this.nodes[i] === value) {
                      return this.nodes[2 * i + 1];
@@ -133,10 +127,8 @@
              }
          }
 
+         // 返回一个节点的右孩子节点
          SqBinaryTree.prototype.rightChild = function(value) {
-             if (this.isEmptyTree()) {
-                 return;
-             }
              for(var i = 0, len = this.nodes.length; i < len; i++) {
                  if (this.nodes[i] === value) {
                      return this.nodes[2 * i + 2];
@@ -146,9 +138,6 @@
 
          // 返回一个右孩子节点的左兄弟节点
          SqBinaryTree.prototype.leftSibling = function(value) {
-             if (this.isEmptyTree()) {
-                 return;
-             }
              for(var i = 1, len = this.nodes.length; i < len; i++) {
                  if (this.nodes[i] === value && i % 2 === 0) {
                      return this.nodes[i - 1];
@@ -158,9 +147,6 @@
 
          // 返回一个左孩子节点的右兄弟节点
          SqBinaryTree.prototype.rightSibling = function(value) {
-             if (this.isEmptyTree()) {
-                 return;
-             }
              for(var i = 1, len = this.nodes.length; i < len; i++) {
                  if (this.nodes[i] === value && i % 2 !== 0) {
                      return this.nodes[i + 1];

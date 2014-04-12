@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+
+        <title></title>
+    </head>
+    <body>
+        <div id="counter"></div>
+        <script src="http://cdn.bootcss.com/require.js/2.1.11/require.js"></script>
+        <script>
+            require(['../../src/animation/loop'], function(loop) {
+                var el = document.getElementById('counter');
+                var i = 0;
+                function fn() {
+                    i++;
+                    el.innerHTML = i;
+
+                    if(i >= 100) {
+                        return false;
+                    }
+                }
+                loop.add(fn);
+                loop.start();
+            });
+        </script>
+    </body>
+</html>

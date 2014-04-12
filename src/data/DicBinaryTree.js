@@ -1,5 +1,5 @@
 /**
-* @file 二叉树的js实现
+* @file 二叉存储方式的二叉树实现
 * @author hushicai02
 */
 
@@ -12,41 +12,55 @@ define(
             this.left = null;
             // 右子节点
             this.right = null;
-            // 父节点
-            this.parent = null;
         }
 
-        function BinaryTree() {
-            this.root = null;
+        function DicBinaryTree(data) {
+            data = data || [];
 
-            // 私有变量
+            // 临时队列
             var queue = [];
-            // 特权函数，主要用于将输入数据构建成二叉树
+            // 构建二叉树
             // 这是一颗完全二叉树：最后一层或者是满的，或者是在右边缺少连续若干节点
-            this.insert = function(value) {
+            for(var i = 0, len = data.length; i < len; i++) {
                 var newNode = new Node(value);
                 if (this.root === null) {
                     this.root = newNode;
                 } else {
+                    // 取下一个节点为子树根节点
                     var node = queue[0];
-
-                    if(node.left === null) {
+                    if (node.left === null) {
                         node.left = newNode;
                     } else if(node.right === null) {
                         node.right = newNode;
+                        // 处理完右子节点后，弹出队列的当前节点
                         queue.shift();
                     }
                 }
 
                 queue.push(newNode);
-
-                return  newNode;
             }
+        }
+
+        DicBinaryTree.prototype.isEmptyTree = function() {
+            return !this.root;
+        }
+
+        DicBinaryTree.prototype.getDepth = function() {
+            if (this.isEmptyTree()) {
+                return 0;
+            }
+
+            function _depth(root) {
+                var i;
+                var j;
+            }
+
+            return _depth(this.root);
         }
 
         // 先序遍历
         // 根—>左节点->右节点
-        BinaryTree.prototype.prefix = function() {
+        DicBinaryTree.prototype.prefix = function() {
             var result = [];
             /**
              * @inner
@@ -67,7 +81,7 @@ define(
 
         // 中序遍历
         // 左节点->根->右节点
-        BinaryTree.prototype.infix = function() {
+        DicBinaryTree.prototype.infix = function() {
             var result = [];
 
             /**
@@ -90,7 +104,7 @@ define(
 
         // 后序遍历
         // 左节点->右节点->根
-        BinaryTree.prototype.postfix = function() {
+        DicBinaryTree.prototype.postfix = function() {
             var result = [];
 
             /**
@@ -110,6 +124,6 @@ define(
             return result;
         }
 
-        return BinaryTree;
+        return DicBinaryTree;
     }
 );
