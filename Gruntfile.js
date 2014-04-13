@@ -20,7 +20,7 @@ module.exports = function(grunt) {
                 src: 'src/**/*.js',
                 options: {
                     outfile: 'SpecRunner.html',
-                    keepRunner: true,
+                    // keepRunner: true,
                     specs: 'test/spec/**/*.js',
                     host: 'http://localhost:<%= connect.test.options.port%>',
                     template: require('grunt-template-jasmine-requirejs'),

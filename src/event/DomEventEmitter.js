@@ -36,12 +36,26 @@ define(
             };
         }
 
+        var emitter = {};
+
+        function getEmitter(guid) {
+            return emitter[guid];
+        }
+
         // 将dom元素包装起来，方便对listeners进行管理
-        // 怎么防止同一个element重复new呢？
         function DomEventEmitter(element) {
+            if (element.guid) {
+                return getEmitter(element.guid);
+            }
+
             this.element = element;
             this.events = {};
             this.eventHandle = null;
+
+            // 挂载一个guid
+            var guid = util.getGuid();
+            element.guid = guid;
+            emitter[guid] = this;
         }
 
         DomEventEmitter.prototype.on = function(type, listener) {

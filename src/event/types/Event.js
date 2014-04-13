@@ -5,6 +5,7 @@
 
  define(
      function(require) {
+         // 有好多属性是只读的，因此传递给这些事件构造器中的参数，有可能反映不到dom event中
          function Event(e) {
              var ev;
              if (e && e.type) {
@@ -28,6 +29,7 @@
              this.cancelable = this.cancelable || true;
          }
 
+         // 搞了这么多事件对象，其实就为了创建一个dom event
          Event.prototype.createDomEvent = function() {
              var eo;
              if (document.createEvent) {

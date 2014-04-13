@@ -15,7 +15,6 @@ define(
             'keyup',
             'keypress'
         ];
-
         var mouseEvents = [
             'click',
             'dbclick',
@@ -24,23 +23,19 @@ define(
             'mouseover',
             'mouseout'
         ];
-
         var focusEvents = [
             'focusin',
             'focusout',
             'focus',
             'blur'
         ];
-
         var wheelEvents = [
             'wheel'
         ];
-
         var inputEvents = [
             'beforeinput',
             'input'
         ];
-
         var htmlEvents = [
             'abort',
             'change',
@@ -53,6 +48,7 @@ define(
             'submit',
             'unload'
         ];
+
         var factory = {};
         util.each(keyboardEvents, function(v, i) {
             factory[v] = KeyboardEvent;
@@ -73,22 +69,17 @@ define(
             factory[v] = HTMLEvent;
         });
 
-        function normalize(e) {
-            var ev;
-            if (e && e.type) {
-                ev = e;
-            }
-            else {
-                ev = {
-                    type: e
-                };
-            }
-            return ev;
-        }
-
         return {
             createEvent: function(e) {
-                var ev = normalize(e);
+                var ev;
+                if (e && e.type) {
+                    ev = e;
+                }
+                else {
+                    ev = {
+                        type: e
+                    };
+                }
                 ev = new factory[ev.type](ev);
 
                 return ev.createDomEvent();

@@ -8,6 +8,12 @@ define(
         var toString = Object.prototype.toString;
         var util = {};
 
+        var uid = 0;
+
+        util.getGuid = function() {
+            return 'hf' + (++uid);
+        };
+
         /**
          * 继承
          *
