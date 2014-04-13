@@ -4,7 +4,9 @@ define(
 
         function FocusEvent(e) {
             UIEvent.call(this, e);
+
             this.eventType = 'FocusEvent';
+
             this.relatedTarget = this.relatedTarget || null;
         }
 

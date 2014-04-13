@@ -4,7 +4,9 @@ define(
 
         function WheelEvent(e) {
             MouseEvent.call(this, e);
+
             this.eventType = 'WheelEvent';
+
             this.deltaMode = this.deltaMode || 0;
             this.deltaX = this.deltaX || 0;
             this.deltaY = this.deltaY || 0;

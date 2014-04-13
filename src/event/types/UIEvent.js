@@ -4,7 +4,9 @@ define(
 
         function UIEvent(e) {
             Event.call(this, e);
+
             this.eventType = 'UIEvent';
+
             this.view = null;
             this.detail = 0;
         }

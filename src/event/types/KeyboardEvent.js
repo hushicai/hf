@@ -35,7 +35,9 @@ define(
 
         function KeyboardEvent(e) {
             UIEvent.call(this, e);
+
             this.eventType = 'KeyboardEvent';
+
             this.ctrlKey = this.ctrlKey || false;
             this.altKey = this.altKey || false;
             this.shiftKey = this.shiftKey || false;

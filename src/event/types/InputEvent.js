@@ -4,6 +4,7 @@ define(
 
         function InputEvent(e) {
             Event.call(this, e);
+
             this.data = this.data || "";
         }
 
