@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+
+        <title>EventEmitter</title>
+    </head>
+    <body>
+        <script src="http://cdn.bootcss.com/require.js/2.1.11/require.js"></script>
+        <script>
+            require(['../../src/event/EventEmitter'], function(EventEmitter) {
+                var ee = new EventEmitter();
+
+                ee.on('test', function() {
+                    console.log('test x', arguments);
+                });
+                ee.on('test', function() {
+                    console.log('test xx', arguments);
+                });
+                ee.on('test1', function() {
+                    console.log('test1', arguments);
+                });
+                ee.emit('test');
+                ee.off('*');
+            });
+        </script>
+    </body>
+</html>

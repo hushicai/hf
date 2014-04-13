@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+
+        <title>DomEventEmitter</title>
+        <style type="text/css" media="screen">
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                background: #666;
+            }
+            canvas {
+                background: #fff;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="stage" width="400" height="400"></canvas>
+        <script src="http://cdn.bootcss.com/require.js/2.1.11/require.js"></script>
+        <script>
+            require(['../../src/event/DomEventEmitter'], function(DomEventEmitter) {
+                var dee = new DomEventEmitter(
+                    document.getElementById('stage')
+                );
+                dee.on('click', function(e) {
+                    console.log(e.target);
+                    dee.off('*');
+                    console.log(dee.events);
+                });
+                dee.on('mousemove', function(e) {
+                    console.log('x', e.pageX);
+                });
+                dee.on('mousemove', function(e) {
+                    console.log('y', e.pageY);
+                });
+            });
+        </script>
+    </body>
+</html>
