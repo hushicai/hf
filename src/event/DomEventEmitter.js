@@ -1,5 +1,5 @@
 /**
- * @file dom事件
+ * @file dom事件包装类
  * @author hushicai02
  */
 
@@ -7,6 +7,7 @@ define(
     function(require) {
         var util = require('../util/index');
         var factory = require('./factory');
+        var lib = require('./index');
         var EventArgs = require('./EventArgs');
 
         // jQuery的事件实现方式比较牛逼
@@ -59,20 +60,13 @@ define(
         }
 
         DomEventEmitter.prototype.on = function(type, listener) {
-            type = type.replace(/^on/i, '').toLowerCase();
-            var element = this.element;
             var eventHandle = this.eventHandle;
 
             if (!eventHandle) {
                 eventHandle = this.eventHandle = createEventHandle(this);
             }
 
-            if (element.addEventListener) {
-                element.addEventListener(type, eventHandle, false);
-            } 
-            else if(element.attachEvent) {
-                element.attachEvent('on' + type, eventHandle);
-            }
+            lib.addEventListener(this.element, type, eventHandle);
 
             var events = this.events[type] = this.events[type] || [];
             events.push(listener);
@@ -102,14 +96,7 @@ define(
                 if (this.events[type] && list.length === 0) {
                     delete this.events[type];
 
-                    var element = this.element;
-                    var eventHandle = this.eventHandle;
-                    if (element.removeEventListener) {
-                        element.removeEventListener(type, eventHandle ,false);
-                    }
-                    else if(element.detachEvent) {
-                        element.detachEvent(type, eventHandle);
-                    }
+                    lib.removeEventListener(this.element, type, this.eventHandle);
                 }
             }
 

@@ -1,5 +1,5 @@
 /**
- * @file 自定义事件
+ * @file 自定义事件包装类
  * @author hushicai02
  */
 

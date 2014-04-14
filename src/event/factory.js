@@ -1,3 +1,8 @@
+/**
+ * @file 事件工厂方法
+ * @author hushicai02
+ */
+
 define(
     function(require) {
         var util = require('../util/index');
