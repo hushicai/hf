@@ -15,10 +15,10 @@ define(
         };
 
         /**
-         * 继承
-         *
-         * @public
-         */
+        * 继承
+        *
+        * @public
+        */
         util.inherit = function(subClass, superClass) {
             var proto = subClass.prototype;
             var F = function() {};
@@ -30,7 +30,7 @@ define(
             subClass.prototype.constructor = subClass;
 
             return subClass;
-        }
+        };
 
         // 默认覆盖
         util.extend = function(t, s, override) {
@@ -42,15 +42,15 @@ define(
                 } 
             }
             return t;
-        }
+        };
 
         util.isObject = function(s) {
             return toString.call(s) === '[object Object]';
-        }
+        };
 
         util.isArray = function(s) {
             return toString.call(s) === '[object Array]';
-        }
+        };
 
         util.each = function(s, iterator) {
             if (util.isObject(s)) {
@@ -69,7 +69,7 @@ define(
                     }
                 }
             }
-        }
+        };
 
         return util;
     }

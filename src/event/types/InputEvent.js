@@ -5,7 +5,7 @@ define(
         function InputEvent(e) {
             Event.call(this, e);
 
-            this.data = this.data || "";
+            this.data = this.data || '';
         }
 
         require('../../util/index').inherit(InputEvent, Event);

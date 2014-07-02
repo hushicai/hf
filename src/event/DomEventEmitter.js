@@ -72,7 +72,7 @@ define(
             events.push(listener);
 
             return this;
-        }
+        };
 
         DomEventEmitter.prototype.off = function(type, listener) {
             if (type === '*') {
@@ -101,10 +101,10 @@ define(
             }
 
             return this;
-        }
+        };
 
         DomEventEmitter.prototype.trigger = function(type, options) {
-            type = type.replace(/^on/i, "");
+            type = type.replace(/^on/i, '');
             var ev = {
                 type: type
             };
@@ -124,7 +124,7 @@ define(
         DomEventEmitter.prototype.destroy = function() {
             this.off('*');
             delete this.element;
-        }
+        };
 
         return DomEventEmitter;
     }

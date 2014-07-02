@@ -66,7 +66,7 @@ define(
             }
 
             return false;
-        }
+        };
 
         KeyboardEvent.KeyCode = KeyCode;
 

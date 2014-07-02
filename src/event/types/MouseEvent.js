@@ -50,7 +50,7 @@ define(
             }
 
             return false;
-        }
+        };
 
         util.inherit(MouseEvent, UIEvent);
 

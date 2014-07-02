@@ -1,6 +1,15 @@
 module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        jshint: {
+            options: {
+                jshintrc: true
+            },
+            files: [
+                'src/**/*.js',
+                'test/**/*.js'
+            ]
+        },
         connect: {
             server: {
                 options: {
@@ -39,7 +48,9 @@ module.exports = function(grunt) {
     // 这不是一个grunt task，不需要load，否则会报错
     // grunt.loadNpmTasks('grunt-template-jasmine-requirejs');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
 
-    grunt.registerTask('server', ['connect:server:keepalive']);
-    grunt.registerTask('test', ['connect:test', 'jasmine:requirejs']);
+    grunt.registerTask('main', ['jshint']);
+    grunt.registerTask('server', ['main', 'connect:server:keepalive']);
+    grunt.registerTask('test', ['main', 'connect:test', 'jasmine:requirejs']);
 };

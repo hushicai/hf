@@ -12,6 +12,6 @@ define(
 
         require('../../util/index').inherit(FocusEvent, UIEvent);
 
-        return FocusEvent
+        return FocusEvent;
     }
 );
