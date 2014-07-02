@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+
+        <title>Bezier</title>
+    </head>
+    <body>
+        <canvas id="test" width="1200" height="200"></canvas>
+        <div id="stage" style="position:relative;"></div>
+        <script>
+            (function() {
+                // De Casteljau递推算法
+                function recursion(points, t) {
+                    function _fn(points) {
+                        var result = [];
+                        for(var i = 0, n = points.length; i < n - 1; i++) {
+                            var p = {
+                                x: (1 - t) * points[i].x + t * points[i + 1].x,
+                                y: (1 - t) * points[i].y + t * points[i + 1].y
+                            };
+                            result.push(p)
+                        }
+
+                        if(result.length === 1) {
+                            return result[0];
+                        }
+                        else {
+                            return _fn(result);
+                        }
+                    }
+                    return _fn(points);
+                }
+                var points = [
+                    {
+                        x: 10,
+                        y: 100
+                    },
+                    {
+                        x: 800,
+                        y: 5
+                    },
+                    {
+                        x: 1000,
+                        y: 200
+                    }
+                ];
+
+                var result = [];
+                var html = [];
+                for(var t = 0; t <= 1; t += 0.01) {
+                    var temp = recursion(points, t);
+                    result.push(temp);
+                    html.push(
+                        "<div style='position:absolute;top:"+ temp.y +"px;left:"+ temp.x
+                            +"px;width:2px;height:4px;background:red;'>",
+                        "</div>"
+                    );
+                }
+                document.getElementById('stage').innerHTML = html.join('');
+
+                // 直接调用canvas内置方法绘制
+                var c = document.getElementById("test");
+                var ctx = c.getContext("2d");
+                ctx.beginPath();
+                ctx.moveTo(points[0].x, points[0].y);
+                ctx.quadraticCurveTo(points[1].x, points[1].y, points[2].x, points[2].y);
+                ctx.stroke();
+            })();
+        </script>
+    </body>
+</html>
