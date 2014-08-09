@@ -31,7 +31,7 @@ module.exports = function(grunt) {
                     outfile: 'SpecRunner.html',
                     keepRunner: true,
                     specs: 'test/spec/**/*.js',
-                    helpers: 'test/*Helper.js',
+                    helpers: 'test/helper/**/*.js',
                     host: 'http://localhost:<%= connect.test.options.port%>',
                     template: require('grunt-template-jasmine-requirejs'),
                     templateOptions: {
