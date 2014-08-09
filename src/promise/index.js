@@ -31,7 +31,7 @@ define(
          * @inner
          */
         function transition(promise, state, value) {
-            if (promise.state === state // 状态相同
+            if (promise.state === state // 状态相同不能转移
                 || promise.state !== State.PENDING // `pending`状态的`promise`才能转移
                 || (state !== State.FULFILLED && state !== State.REJECTED) // 只能向`fulfilled`或`rejected`转移
             ) {
@@ -106,8 +106,8 @@ define(
 
                     try {
                         var callback = promise.state === State.FULFILLED
-                            ? (obj.fulfill || function(v) {return v;})
-                            : (obj.reject || function(r) {throw r;});
+                            ? obj.fulfill
+                            : obj.reject;
 
                         var value = callback(promise.value);
 
@@ -142,6 +142,9 @@ define(
                     transition(self, State.REJECTED, reason);
                 });
             }
+            else {
+                throw new TypeError('Promise resolver不能为空, `new Promise(function(resolve, reject) {})`');
+            }
         }
 
         /**
@@ -160,6 +163,16 @@ define(
             });
 
             return forkedPromise;
+        };
+
+        /**
+         * 捕获异
+         * 
+         * @public
+         * @return {Promise}
+         */
+        Promise.prototype.catch = function(onRejected) {
+            return this.then(null, onRejected);
         };
 
         Promise.resovled = function() {
