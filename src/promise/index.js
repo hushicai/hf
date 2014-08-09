@@ -143,11 +143,16 @@ define(
             
             var self = this;
 
-            resolver(function(value) {
-                transition(self, State.FULFILLED, value);
-            }, function(reason) {
-                transition(self, State.REJECTED, reason);
-            });
+            try {
+                resolver(function(value) {
+                    transition(self, State.FULFILLED, value);
+                }, function(reason) {
+                    transition(self, State.REJECTED, reason);
+                });
+            }
+            catch(ex) {
+                transition(self, State.REJECTED, ex);
+            }
         }
 
         /**
