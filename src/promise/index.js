@@ -128,6 +128,14 @@ define(
          * @constructor
          */
         function Promise(resolver) {
+            if (typeof resolver !== 'function') {
+                throw new TypeError('Promise should be called with a function argument.');
+            }
+
+            if (!(this instanceof Promise)) {
+                throw new TypeError('Promise should be called with `new`.');
+            }
+
             this.state = State.PENDING;
             this.value = null;
 
@@ -135,16 +143,11 @@ define(
             
             var self = this;
 
-            if (typeof resolver === 'function') {
-                resolver(function(value) {
-                    transition(self, State.FULFILLED, value);
-                }, function(reason) {
-                    transition(self, State.REJECTED, reason);
-                });
-            }
-            else {
-                throw new TypeError('Promise resolver不能为空, `new Promise(function(resolve, reject) {})`');
-            }
+            resolver(function(value) {
+                transition(self, State.FULFILLED, value);
+            }, function(reason) {
+                transition(self, State.REJECTED, reason);
+            });
         }
 
         /**
@@ -154,7 +157,7 @@ define(
          * @return {Promise} 
          */
         Promise.prototype.then = function(onFulfilled, onRejected) {
-            var forkedPromise = new Promise();
+            var forkedPromise = new Promise(function() {});
 
             this._queue.push({
                 fulfill: onFulfilled,
