@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>promise</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <script src="../asset/requirejs/require.js"></script>
+    <script>
+        require(['../../src/promise/index'], function(Promise) {
+            new Promise(function(resolve, reject) {
+                resolve('hushicai');
+            })
+            .then()
+            .then(function(v) {
+                alert(v);
+            });
+        });
+    </script>
+</body>
+</html>
