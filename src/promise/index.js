@@ -103,18 +103,23 @@ define(
             function flush() {
                 while(promise._queue.length) {
                     var obj = promise._queue.shift();
+                    var callback = promise.state === State.FULFILLED
+                        ? obj.fulfill
+                        : obj.reject;
 
-                    try {
-                        var callback = promise.state === State.FULFILLED
-                            ? obj.fulfill
-                            : obj.reject;
+                    if (typeof callback === 'function') {
+                        try {
 
-                        var value = callback(promise.value);
+                            var value = callback(promise.value);
 
-                        resolve(obj.forkedPromise, value);
+                            resolve(obj.forkedPromise, value);
+                        }
+                        catch(ex) {
+                            transition(obj.forkedPromise, State.REJECTED, ex);
+                        }
                     }
-                    catch(ex) {
-                        transition(obj.forkedPromise, State.REJECTED, ex);
+                    else {
+                        transition(obj.forkedPromise, promise.state, promise.value);
                     }
                 }
             }
@@ -174,7 +179,7 @@ define(
         };
 
         /**
-         * 捕获异
+         * 捕获异常
          * 
          * @public
          * @return {Promise}
