@@ -109,9 +109,7 @@ define(
 
                     if (typeof callback === 'function') {
                         try {
-
                             var value = callback(promise.value);
-
                             resolve(obj.forkedPromise, value);
                         }
                         catch(ex) {
