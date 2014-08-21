@@ -35,7 +35,7 @@
                 var p2 = record.p2;
                 var i = record.i;
 
-                var fragment = document.createDocumentFragment();
+                var p = document.createElement('p');
                 for(var k = 0, len = s.length; k < len; k++) {
                     var span = document.createElement('span');
                     span.innerHTML = s[k];
@@ -46,11 +46,11 @@
                     if (i !== undefined && k === i) {
                         span.style.background = 'yellow';
                     }
-                    fragment.appendChild(span);
+                    p.appendChild(span);
                 }
 
                 stage.innerHTML = "";
-                stage.appendChild(fragment);
+                stage.appendChild(p);
             }
 
             function nextFrame() {
