@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>rotate</title>
+    <style type="text/css">
+        #stage span {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            margin: 0 10px;
+            border: 1px solid #333;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div id="stage"></div>
+    <script src="../../vendor/requirejs/require.js"></script>
+    <script>
+        require(['../../src/algorithm/Rotate'], function(Rotate) {
+            var stage = document.getElementById('stage');
+            var desc = document.getElementById('desc');
+            var r = new Rotate();
+            var s = r.rotate("abcdefghijk", 3);
+            var records = r.getRecords();
+
+            var interval = 0;
+
+            function frame(record) {
+                var s = record.s;
+                var p1 = record.p1;
+                var p2 = record.p2;
+                var i = record.i;
+
+                var fragment = document.createDocumentFragment();
+                for(var k = 0, len = s.length; k < len; k++) {
+                    var span = document.createElement('span');
+                    span.innerHTML = s[k];
+                    if (i === undefined && (k === p1 || k === p2)) {
+                        span.style.background = 'red';
+                        span.style.color = '#fff';
+                    }
+                    if (i !== undefined && k === i) {
+                        span.style.background = 'yellow';
+                    }
+                    fragment.appendChild(span);
+                }
+
+                stage.innerHTML = "";
+                stage.appendChild(fragment);
+            }
+
+            function nextFrame() {
+                var record = records.shift();
+
+                if (record) {
+                    frame(record);
+                }
+                else {
+                    stop();
+                }
+            }
+
+            function stop() {
+                clearInterval(interval);
+            }
+
+            function start() {
+                interval = setInterval(nextFrame, 1000);
+
+                // 第一帧
+                nextFrame();
+            }
+
+            start();
+        });
+    </script>
+</body>
+</html>

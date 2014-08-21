@@ -3,6 +3,11 @@
  * @author hushicai02
  */
 
+
+// 这个动画主循环比较坑
+// 没法控制时间间隔
+// 动画很快就播放完了...
+
  define(
      function(require) {
          var array = require('../lang/array');
