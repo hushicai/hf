@@ -127,12 +127,15 @@ define(
 
             // 简单地来吧
             // jquery就是这么触发的
-            // 一些特殊的事件无法程序自动trigger
             try {
+                // 触发`click`等可以直接调用的事件
                 this.element[type]();
             }
             catch (ex) {
-            
+                // 一些特殊的事件无法程序自动trigger
+                // 真正要触发各种事件的话
+                // 得处理好多中事件类型，比如HTMLEvents、MouseEvents等
+                // 之前写了，但感觉比较乱，所以删了
             }
         };
 

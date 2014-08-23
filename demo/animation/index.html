@@ -9,7 +9,7 @@
         <div id="counter"></div>
         <script src="../../vendor/requirejs/require.js"></script>
         <script>
-            require(['../../src/animation/loop'], function(loop) {
+            require(['../../src/animation/index'], function(animation) {
                 var el = document.getElementById('counter');
                 var i = 0;
                 function fn() {
@@ -20,8 +20,8 @@
                         return false;
                     }
                 }
-                loop.add(fn);
-                loop.start();
+                animation.add(fn);
+                animation.start();
             });
         </script>
     </body>
