@@ -5,7 +5,7 @@
 
 define(
     function(require) {
-        var util = require('../util/index');
+        var getGuid = require('../lang/getGuid');
 
         /**
          * 事件对象
@@ -71,7 +71,7 @@ define(
             this.eventHandle = null;
 
             // 挂载一个guid
-            var guid = util.getGuid();
+            var guid = getGuid();
             element.guid = guid;
             emitter[guid] = this;
         }
