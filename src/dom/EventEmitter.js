@@ -6,9 +6,27 @@
 define(
     function(require) {
         var util = require('../util/index');
-        var factory = require('./factory');
-        var lib = require('./index');
-        var EventArgs = require('./EventArgs');
+
+        /**
+         * 事件对象
+         * 
+         * @constructor
+         */
+        function EventArgs(e) {
+            this.originEvent = e;
+
+            for(var k in e) {
+                var item = e[k];
+                if (typeof item !== 'function') {
+                    this[k] = item;
+                }
+            }
+
+            this.target = this.target || this.srcElement || null;
+            this.which = this.which || this.keyCode || 0;
+        }
+        EventArgs.prototype.stopPropagation = function() {};
+        EventArgs.prototype.preventDefault = function() {};
 
         // jQuery的事件实现方式比较牛逼
         // 对于每一个元素，都使用同一个事件监听器，在该事件监听器中，对事件进行dispatch
@@ -66,7 +84,7 @@ define(
                 eventHandle = this.eventHandle = createEventHandle(this);
             }
 
-            lib.addEventListener(this.element, type, eventHandle);
+            this.constructor.addEventListener(this.element, type, eventHandle);
 
             var events = this.events[type] = this.events[type] || [];
             events.push(listener);
@@ -96,7 +114,7 @@ define(
                 if (this.events[type] && list.length === 0) {
                     delete this.events[type];
 
-                    lib.removeEventListener(this.element, type, this.eventHandle);
+                    this.constructor.removeEventListener(this.element, type, this.eventHandle);
                 }
             }
 
@@ -105,13 +123,15 @@ define(
 
         DomEventEmitter.prototype.trigger = function(type, options) {
             type = type.replace(/^on/i, '');
-            var ev = {
-                type: type
-            };
-            util.extend(ev, options);
+            // var ev = {
+                // type: type
+            // };
+            // util.extend(ev, options);
 
-            ev = factory.createEvent(ev);
+            // ev = factory.createEvent(ev);
             var element = this.element;
+
+            // 取出事件列表？
 
             if (element.dispatchEvent) {
                 element.dispatchEvent(ev);
@@ -121,9 +141,32 @@ define(
             }
         };
 
-        DomEventEmitter.prototype.destroy = function() {
+        DomEventEmitter.prototype.dispose = function() {
             this.off('*');
             delete this.element;
+        };
+
+        // 添加事件监听
+        DomEventEmitter.addEventListener = function(element, type, listener) {
+            if (element.addEventListener) {
+                element.addEventListener(type, listener, false);
+            } 
+            else if(element.attachEvent) {
+                element.attachEvent('on' + type, listener);
+            }
+
+            return this;
+        };
+        // 移除事件监听
+        DomEventEmitte.removeEventListener = function(element, type, listener) {
+            if (element.removeEventListener) {
+                element.removeEventListener(type, listener ,false);
+            }
+            else if(element.detachEvent) {
+                element.detachEvent(type, listener);
+            }
+
+            return this;
         };
 
         return DomEventEmitter;

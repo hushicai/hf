@@ -21,7 +21,7 @@
         <canvas id="stage" width="400" height="400"></canvas>
         <script src="../../vendor/requirejs/require.js"></script>
         <script>
-            require(['../../src/event/DomEventEmitter'], function(DomEventEmitter) {
+            require(['../../src/dom/Event'], function(DomEventEmitter) {
                 var dee = new DomEventEmitter(
                     document.getElementById('stage')
                 );
@@ -29,7 +29,7 @@
                     console.log('click', e);
                 });
 
-                dee.trigger('click', {button: 3});
+                dee.trigger('click');
             });
         </script>
     </body>
