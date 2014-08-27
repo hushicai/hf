@@ -1,0 +1,29 @@
+{
+  "name": "hf",
+  "version": "0.0.1",
+  "homepage": "http://hushicai.com",
+  "authors": [
+    "hushicai <bluthcy@gmail.com>"
+  ],
+  "description": "just some javascript cod",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "hf"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "jquery": "~2.1.1",
+    "angularjs": "~1.2.23",
+    "requirejs": "~2.1.14"
+  }
+}
