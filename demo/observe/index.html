@@ -7,13 +7,18 @@
 <body>
     <script src="../../vendor/requirejs/require.js"></script>
     <script>
-        var myObj = { id: 1, foo: 'bar' };
-        require(['../../src/observe/index'], function(observe) {
-            var ObjectObserver = observe.ObjectObserver;
-            var observer = new ObjectObserver(myObj);
-            observer.open(function(added, removed, changed) {
-                console.log(added, removed, changed);
+        require(['../../src/observe/ObjectObserver'], function(ObjectObserver) {
+            var myObj = { id: 1, foo: 'bar' };
+            var observer1 = new ObjectObserver(myObj);
+            observer1.open(function(added, removed, changed) {
+                console.log('added', added);
+                console.log('removed', removed);
+                console.log('changed', changed);
             });
+            myObj.name = 'hushicai';
+            myObj.id = 2;
+            observer1.deliver();
+            observer1.close();
         });
     </script>
 </body>

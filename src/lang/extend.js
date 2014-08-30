@@ -14,7 +14,7 @@ define(
                 }
                 for (var key in s) {
                     if (s.hasOwnProperty(key)) {
-                        t[key] = s[ley];
+                        t[key] = s[key];
                     }
                 }
             }

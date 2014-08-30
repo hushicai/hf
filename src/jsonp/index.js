@@ -18,7 +18,7 @@ define(
             // 30秒
             timeout = timeout || 30000;
 
-            var message = "请求超时";
+            var message = '请求超时';
 
             timers[scriptId] = setTimeout(curry(fail, scriptId, message), timeout);
         }
