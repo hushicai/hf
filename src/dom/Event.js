@@ -123,7 +123,6 @@ define(
 
         DomEventEmitter.prototype.trigger = function(type, options) {
             type = type.replace(/^on/i, '');
-            var element = this.element;
 
             // 简单地来吧
             // jquery就是这么触发的

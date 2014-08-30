@@ -10,6 +10,7 @@ define(
         }
 
         EventEmitter.prototype.on = function(type, listener) {
+            this.events = this.events || {};
             var events = this.events[type] = this.events[type] || [];
 
             events.push(listener);
@@ -56,6 +57,10 @@ define(
             }
 
             return this;
+        };
+
+        EventEmitter.mixin = function(obj) {
+            return require('../lang/mixin')(obj, EventEmitter.prototype);
         };
 
         return EventEmitter;

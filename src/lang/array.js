@@ -6,6 +6,7 @@
  define(
      function(require) {
          var indexOf = Array.prototype.indexOf;
+
          return {
              /**
               * indexOf

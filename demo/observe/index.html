@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>observe</title>
+</head>
+<body>
+    <script src="../../vendor/requirejs/require.js"></script>
+    <script>
+        var myObj = { id: 1, foo: 'bar' };
+        require(['../../src/observe/index'], function(observe) {
+            var ObjectObserver = observe.ObjectObserver;
+            var observer = new ObjectObserver(myObj);
+            observer.open(function(added, removed, changed) {
+                console.log(added, removed, changed);
+            });
+        });
+    </script>
+</body>
+</html>

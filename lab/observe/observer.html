@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>observe</title>
+</head>
+<body>
+    <script>
+        // Let's say we have a model with data
+        var model = {};
+
+        // Which we then observe
+        Object.observe(model, function(changes){
+
+            // This asynchronous callback runs
+            changes.forEach(function(change) {
+
+                // Letting us know what changed
+                console.log(change.type, change.name, change.oldValue);
+            });
+
+        });
+
+        var todoModel = {
+            label: 'Default',
+            completed: false
+        };
+        
+        function observer(changes) {
+            changes.forEach(function(change, i) {
+                console.log('what property changed? ' + change.name);
+                console.log('how did it change? ' + change.type);
+                console.log('whats the current value? ' + change.object[change.name]);
+                console.log(change);
+            });
+        }
+
+        Object.observe(todoModel, observer);
+    </script>
+</body>
+</html>

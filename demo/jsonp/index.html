@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>jsonp</title>
+</head>
+<body>
+    <div id="result"></div>
+   <script src="../../vendor/requirejs/require.js"></script>
+   <script>
+       require(['../../src/jsonp/index'], function(jsonp) {
+           var promise = jsonp({
+               url: '/jsonp'
+           });
+
+           promise.then(function(res) {
+               document.getElementById('result').innerHTML = "name = " + res.name;
+           }, function(r) {
+               console.log(r);
+           });
+       });
+   </script>
+</body>
+</html>

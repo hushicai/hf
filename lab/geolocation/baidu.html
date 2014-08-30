@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>lbs</title>
+</head>
+<body>
+    <script src="../../vendor/requirejs/require.js"></script>
+    <script src="../../vendor/jquery/dist/jquery.js"></script>
+    <script>
+        require(['./geo'], function(geo) {
+            geo.getLocation()
+                .on('founded', getLbsInfo)
+                .on('fail', function(message) {
+                    console.log(message);
+                });
+
+            function getLbsInfo(position) {
+                var coords = position.coords;
+                var location = coords.latitude + ',' + coords.longitude;
+
+                var url = 'http://api.map.baidu.com/geocoder/v2/?' 
+                    + 'ak=xm7GiTYYwBrWBdoWVCMRrPBe&callback=?';
+
+                $.getJSON(url, {
+                    location: location, 
+                    output: 'json',
+                    coordtype: 'wgs84ll'
+                }).done(function(res) {
+                    alert(res.result.formatted_address);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>notification</title>
+</head>
+<body>
+    <script>
+        // Define a simple model
+        var model = {
+            a: {}
+        };
+
+        // And a separate variable we'll be using for our model's 
+        // getter in just a moment
+        var _b = 2;
+
+        // Define a new property 'b' under 'a' with a custom
+        // getter and setter
+
+        Object.defineProperty(model.a, 'b', {
+            get: function () {
+                return _b;
+            },
+            set: function (b) {
+
+                // Whenever 'b' is set on the model
+                // notify the world about a specific type
+                // of change being made. This gives you a huge
+                // amount of control over notifications
+                Object.getNotifier(this).notify({
+                    type: 'update',
+                    name: 'b',
+                    oldValue: _b
+                });
+
+                // Let's also log out the value anytime it gets
+                // set for kicks
+                console.log('set', b);
+
+                _b = b;
+            }
+        });
+
+        // Set up our observer
+        function observer(changes) {
+            changes.forEach(function (change, i) {
+                console.log(change);
+            })
+        }
+
+        // Begin observing model.a for changes
+        Object.observe(model.a, observer);
+    </script>
+</body>
+</html>

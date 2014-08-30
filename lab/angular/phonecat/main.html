@@ -1,0 +1,15 @@
+<html ng-app="phonecatApp">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../../vendor/angularjs/angular.min.js"></script>
+        <script src="./controller.js"></script>
+    </head>
+    <body ng-controller="PhoneListCtrl">
+        <ul>
+            <li ng-repeat="phone in phones">
+                {{phone.name}}
+                <p>{{phone.snippet}}</p>
+            </li>
+        </ul>
+    </body>
+</html>

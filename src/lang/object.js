@@ -1,3 +1,7 @@
+/**
+ * @file 对象常用方法
+ * @author hushicai(bluthcy@gmail.com)
+ */
 define(
     function(require) {
         return {
@@ -11,7 +15,14 @@ define(
                         keys.push(k);
                     }
                     return keys;
+                },
+
+            isEmpty: function(obj) {
+                for (var prop in obj) { // jshint ignore:line
+                    return false;
                 }
+                return true;
+            }
         };
     }
 );

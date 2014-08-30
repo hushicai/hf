@@ -5,14 +5,20 @@
 
 define(
     function(require) {
-        function extend(t, s, override) {
-            s = s || {};
-            override = override === undefined ? true : false;
-            for(var k in s) {
-                if (override || !t[k]) {
-                    t[k] = s[k];
-                } 
+        function extend(t, s) {
+            t = t || {};
+            for (var i = 1, len = arguments.length; i < len; i++) {
+                s = arguments[i];
+                if (!s) {
+                    continue;
+                }
+                for (var key in s) {
+                    if (s.hasOwnProperty(key)) {
+                        t[key] = s[ley];
+                    }
+                }
             }
+
             return t;
         }
 

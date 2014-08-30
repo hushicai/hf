@@ -1,3 +1,5 @@
+var path = require('path');
+
 module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -11,16 +13,18 @@ module.exports = function(grunt) {
             ]
         },
         connect: {
-            server: {
-                options: {
-                    port: 8889,
-                    basee: '.',
-                    host: 'localhost'
-                }
-            },
             test: {
                 options: {
                     port: 8888
+                }
+            }
+        },
+        express: {
+            mock: {
+                options: {
+                    port: 9000,
+                    hostname: 'localhost',
+                    server: path.resolve('./server')
                 }
             }
         },
@@ -46,12 +50,14 @@ module.exports = function(grunt) {
     });
 
     grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-express');
     // 这不是一个grunt task，不需要load，否则会报错
     // grunt.loadNpmTasks('grunt-template-jasmine-requirejs');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-contrib-jshint');
 
     grunt.registerTask('main', ['jshint']);
-    grunt.registerTask('server', ['main', 'connect:server:keepalive']);
+    grunt.registerTask('server', ['main', 'express', 'express-keepalive']);
     grunt.registerTask('test', ['main', 'connect:test', 'jasmine:requirejs']);
+    grunt.registerTask('default', ['server']);
 };

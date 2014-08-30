@@ -130,8 +130,8 @@ define(
          * 
          * @constructor
          */
-        function Promise(resolver) {
-            if (typeof resolver !== 'function') {
+        function Promise(fn) {
+            if (typeof fn !== 'function') {
                 throw new TypeError('Promise should be called with a function argument.');
             }
 
@@ -147,7 +147,7 @@ define(
             var self = this;
 
             try {
-                resolver(function(value) {
+                fn(function(value) {
                     transition(self, State.FULFILLED, value);
                 }, function(reason) {
                     transition(self, State.REJECTED, reason);
@@ -186,13 +186,9 @@ define(
             return this.then(null, onRejected);
         };
 
-        Promise.resovled = function() {
+        Promise.resovled = function() {};
 
-        };
-
-        Promise.rejected = function() {
-
-        };
+        Promise.rejected = function() {};
 
         return Promise;
     }
