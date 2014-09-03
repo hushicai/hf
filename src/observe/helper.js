@@ -11,15 +11,17 @@ define(
             && typeof Array.observe === 'function'; 
 
         return {
-            hasObserve: hasObserve,
+            // hasObserve: hasObserve,
+            // for test
+            hasObserve: false,
 
             diffIsEmpty: function(diff) {
-                return object.isEmpty(diff.added) &&
-                    object.isEmpty(diff.removed) &&
-                    object.isEmpty(diff.changed);
+                return object.isEmpty(diff.added) 
+                    && object.isEmpty(diff.removed) 
+                    && object.isEmpty(diff.changed);
             },
 
-            diffWidthChangeRecords: function(data, changeRecords) {
+            diffWithChangeRecords: function(data, changeRecords) {
                 var expectedRecordTypes = {
                     'add': true,
                     'update': true,

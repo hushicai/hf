@@ -22,10 +22,12 @@ define(
                 }
             }
 
-            this.target = this.target || this.srcElement || null;
-            this.which = this.which || this.keyCode || 0;
+            this.target = this.target || this.srcElement;
+            this.which = this.which || this.keyCode;
         }
-        EventArgs.prototype.stopPropagation = function() {};
+        EventArgs.prototype.stopPropagation = function() {
+
+        };
         EventArgs.prototype.preventDefault = function() {};
 
         // jQuery的事件实现方式比较牛逼

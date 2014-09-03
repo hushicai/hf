@@ -20,7 +20,9 @@
                         return false;
                     }
                 }
-                animation.add(fn);
+                animation.add({
+                    step: fn
+                });
                 animation.start();
             });
         </script>

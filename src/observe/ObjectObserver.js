@@ -34,7 +34,7 @@ define(
                         return false;
                     }
 
-                    diff = helper.diffWidthChangeRecords(this.data, changeRecords);
+                    diff = helper.diffWithChangeRecords(this.data, changeRecords);
                 } 
                 else {
                     diff = helper.diffWithOldData(this.data, this.oldData);

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>timeline</title>
+</head>
+<body>
+    <div id="test" style="width: 20px; height: 30px; background: red;"></div>
+    <script src="../../vendor/requirejs/require.js"></script>
+    <script>
+        require([
+                '../../src/animation/Animation'
+            ], 
+            function(Animation) { 
+                var element = document.getElementById('test');
+                var animation = new Animation(
+                    element, 
+                    function(target, percent) {
+                        target.style.width = 20 + percent * 100 + 'px';
+                    },
+                    {duration: 1000}
+                );
+                animation.play();
+            }
+        );
+    </script>
+</body>
+</html>

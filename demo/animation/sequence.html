@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>timeline</title>
+</head>
+<body>
+    <div id="test" style="position: absolute; left: 0; top: 0; width: 20px; height: 20px; background: red;"></div>
+    <script src="../../vendor/requirejs/require.js"></script>
+    <script>
+        require([
+                '../../src/animation/Animation',
+                '../../src/animation/AnimationSequence'
+            ], 
+            function(Animation, AnimationSequence) { 
+                var element = document.getElementById('test');
+                var animation = new Animation(
+                    element, 
+                    function(target, percent) {
+                        target.style.left = 500 * percent + 'px'
+                    },
+                    {duration: 1000, easing: 'elastic'}
+                );
+                var seq = new AnimationSequence([
+                    animation
+                ]);top
+
+                seq.play();
+            }
+        );
+    </script>
+</body>
+</html>
