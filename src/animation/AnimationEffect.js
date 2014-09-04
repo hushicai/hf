@@ -9,9 +9,7 @@ define(
 
         AnimationEffect.prototype = {
             constructor: AnimationEffect,
-            sample: function(target, percent) {
-
-            }
+            sample: function(percent) {}
         };
 
         return AnimationEffect;

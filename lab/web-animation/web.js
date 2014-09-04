@@ -1169,7 +1169,6 @@ Animation.prototype = createObject(TimedItem.prototype, {
     return fillMode === 'auto' ? 'none' : fillMode;
   },
   _sample: function() {
-      console.log(this._timeFraction);
     if (isDefinedAndNotNull(this.effect) &&
         !(this.target instanceof PseudoElementReference)) {
       if (isEffectCallback(this.effect)) {
@@ -2038,9 +2037,11 @@ KeyframeEffect.prototype = createObject(AnimationEffect.prototype, {
   _sample: function(timeFraction, currentIteration, target) {
     var frames = this._propertySpecificKeyframes();
     for (var property in frames) {
-      compositor.setAnimatedValue(target, property,
-          this._sampleForProperty(
-              frames[property], timeFraction, currentIteration));
+      compositor.setAnimatedValue(
+          target, 
+          property, 
+          this._sampleForProperty(frames[property], timeFraction, currentIteration)
+      );
     }
   },
   _sampleForProperty: function(frames, timeFraction, currentIteration) {
@@ -2067,6 +2068,7 @@ KeyframeEffect.prototype = createObject(AnimationEffect.prototype, {
         startKeyframeIndex = length - 2;
       }
     } else {
+        // 找到第一个offset比当前timeFraction小的frame
       for (var i = length - 1; i >= 0; i--) {
         if (frames[i].offset <= timeFraction) {
           ASSERT_ENABLED && assert(frames[i].offset !== 1.0);
@@ -2077,6 +2079,7 @@ KeyframeEffect.prototype = createObject(AnimationEffect.prototype, {
     }
     var startKeyframe = frames[startKeyframeIndex];
     var endKeyframe = frames[startKeyframeIndex + 1];
+    console.log(startKeyframe, endKeyframe);
     if (startKeyframe.offset === timeFraction) {
       return new AddReplaceCompositableValue(startKeyframe.rawValue(),
           this._compositeForKeyframe(startKeyframe));
@@ -2124,13 +2127,11 @@ KeyframeEffect.prototype = createObject(AnimationEffect.prototype, {
 
       // Add synthetic keyframes at offsets of 0 and 1 if required.
       if (frames[0].offset !== 0.0) {
-        var keyframe = new PropertySpecificKeyframe(0.0, 'add',
-            presetTimingFunctions.linear, property, cssNeutralValue);
+        var keyframe = new PropertySpecificKeyframe(0.0, 'add', presetTimingFunctions.linear, property, cssNeutralValue);
         frames.unshift(keyframe);
       }
       if (frames[frames.length - 1].offset !== 1.0) {
-        var keyframe = new PropertySpecificKeyframe(1.0, 'add',
-            presetTimingFunctions.linear, property, cssNeutralValue);
+        var keyframe = new PropertySpecificKeyframe(1.0, 'add', presetTimingFunctions.linear, property, cssNeutralValue);
         frames.push(keyframe);
       }
       ASSERT_ENABLED && assert(

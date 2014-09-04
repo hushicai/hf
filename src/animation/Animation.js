@@ -5,24 +5,38 @@
 
 define(
     function(require) {
+        var curry = require('../lang/curry');
         var extend = require('../lang/extend');
-        var clock = require('./clock');
         var timeline = require('./timeline');
         var AnimationEffect = require('./AnimationEffect');
+        var KeyframeEffect = require('./KeyframeEffect');
 
         var presetTimingFunctions = require('./easing');
 
         var defaultTimingInput = {
             duration: 500,
-            easing: 'linear'
+            easing: 'linear',
+            iterations: 1
         };
 
         function Animation(target, effect, timingInput) {
             this.timing = extend({}, defaultTimingInput, timingInput);
             this.startTime = null;
-            this.state = 'playing';
-            this.effect = effect;
+            this.state = 'init';
             this.target = target;
+            this.currentIteration = 0;
+
+            if (typeof effect === 'function') {
+                this.effect = {
+                    sample: curry(effect, target)
+                };
+            }
+            else if (effect instanceof AnimationEffect) {
+                this.effect = effect;
+            }
+            else {
+                this.effect = new KeyframeEffect(target, effect);
+            }
         }
 
         Animation.prototype = {
@@ -58,18 +72,23 @@ define(
                     percent = timingFunction(percent);
                 }
 
-                if (typeof this.effect === 'function') {
-                    this.effect(this.target, percent);
-                }
-                else if (this.effect instanceof AnimationEffect) {
-                    this.effect.sample(this.target, percent);
-                }
+                this.effect.sample(percent);
 
                 return this;
             },
 
-            play: function() {
+            updateMarker: function() {
+                this.state = 'playing';
                 this.startTime = timeline.getCurrentTime();
+                this.currentIteration++;
+            },
+
+            play: function() {
+                if (this.state === 'playing') {
+                    return;
+                }
+
+                this.updateMarker();
                 timeline.add(this);
                 timeline.play();
 
@@ -80,8 +99,19 @@ define(
                 });
             },
 
+            /**
+             * 是否结束
+             * 
+             * @public
+             */
             isFinished: function() {
                 if (this.state === 'finished') {
+                    if (this.currentIteration < this.timing.iterations) {
+                        // 重新开始
+                        this.updateMarker();
+                        return false;
+                    }
+
                     this._resolver(this.currentTime);
                     return true;
                 }

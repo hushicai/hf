@@ -17,9 +17,17 @@
                 var animation = new Animation(
                     element, 
                     function(target, percent) {
-                        target.style.left = 500 * percent + 'px'
+                        if (percent < 0.3) {
+                            target.style.top = 200 * percent + 'px';
+                        }
+                        else if (percent >= 0.3 && percent < 0.8) {
+                            target.style.left = 500 * percent + 'px';
+                        }
+                        else {
+                            target.style.top = 200 * percent + 'px';
+                        }
                     },
-                    {duration: 1000, easing: 'elastic'}
+                    {duration: 1000, easing: 'linear'}
                 );
                 var seq = new AnimationSequence([
                     animation
