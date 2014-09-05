@@ -22,13 +22,14 @@ define(
         function Animation(target, effect, timingInput) {
             this.timing = extend({}, defaultTimingInput, timingInput);
             this.startTime = null;
+            this.currentTime = null;
+            this.currentIteration = 0;
             this.state = 'init';
             this.target = target;
-            this.currentIteration = 0;
 
             if (typeof effect === 'function') {
                 this.effect = {
-                    sample: curry(effect, target)
+                    sample: effect
                 };
             }
             else if (effect instanceof AnimationEffect) {
@@ -105,7 +106,9 @@ define(
              * @public
              */
             isFinished: function() {
+                // 上一轮动画已播放完成
                 if (this.state === 'finished') {
+                    // 如果迭代次数还未到，则继续播放
                     if (this.currentIteration < this.timing.iterations) {
                         // 重新开始
                         this.updateMarker();
