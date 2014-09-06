@@ -41,7 +41,7 @@ define(
                 return this.data;
             },
             close: function() {
-                if (this.state != State.opened) {
+                if (this.state !== State.opened) {
                     return;
                 }
                 this._disconnect();
@@ -51,7 +51,7 @@ define(
                 this.state = State.closed;
             },
             deliver: function() {
-                if (this.state != State.opened) {
+                if (this.state !== State.opened) {
                     return false;
                 }
 

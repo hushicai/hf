@@ -18,7 +18,9 @@ define(
             },
 
             easeInOutQuad: function(value) {
-                if ((value/=0.5) < 1) return 0.5*Math.pow(value,2);
+                if ((value/=0.5) < 1)  {
+                    return 0.5*Math.pow(value,2);
+                }
                 return -0.5 * ((value-=2)*value - 2);
             },
 
@@ -31,7 +33,9 @@ define(
             },
 
             easeInOutCubic: function(value) {
-                if ((value/=0.5) < 1) return 0.5*Math.pow(value,3);
+                if ((value/=0.5) < 1) {
+                    return 0.5*Math.pow(value,3);
+                } 
                 return 0.5 * (Math.pow((value-2),3) + 2);
             },
 
@@ -44,7 +48,9 @@ define(
             },
 
             easeInOutQuart: function(value) {
-                if ((value/=0.5) < 1) return 0.5*Math.pow(value,4);
+                if ((value/=0.5) < 1) {
+                    return 0.5*Math.pow(value,4);
+                }
                 return -0.5 * ((value-=2)*Math.pow(value,3) - 2);
             },
 
@@ -57,7 +63,9 @@ define(
             },
 
             easeInOutQuint: function(value) {
-                if ((value/=0.5) < 1) return 0.5*Math.pow(value,5);
+                if ((value/=0.5) < 1) {
+                    return 0.5*Math.pow(value,5);
+                }
                 return 0.5 * (Math.pow((value-2),5) + 2);
             },
 
@@ -82,9 +90,15 @@ define(
             },
 
             easeInOutExpo: function(value) {
-                if(value===0) return 0;
-                if(value===1) return 1;
-                if((value/=0.5) < 1) return 0.5 * Math.pow(2,10 * (value-1));
+                if(value===0) {
+                    return 0;
+                }
+                if(value === 1) {
+                    return 1;
+                } 
+                if((value/=0.5) < 1) {
+                    return 0.5 * Math.pow(2,10 * (value-1));
+                }
                 return 0.5 * (-Math.pow(2, -10 * --value) + 2);
             },
 
@@ -97,18 +111,23 @@ define(
             },
 
             easeInOutCirc: function(value) {
-                if((value/=0.5) < 1) return -0.5 * (Math.sqrt(1 - value*value) - 1);
+                if((value/=0.5) < 1) {
+                    return -0.5 * (Math.sqrt(1 - value*value) - 1);
+                }
                 return 0.5 * (Math.sqrt(1 - (value-=2)*value) + 1);
             },
 
             easeOutBounce: function(value) {
                 if ((value) < (1/2.75)) {
                     return (7.5625*value*value);
-                } else if (value < (2/2.75)) {
+                } 
+                else if (value < (2/2.75)) {
                     return (7.5625*(value-=(1.5/2.75))*value + 0.75);
-                } else if (value < (2.5/2.75)) {
+                } 
+                else if (value < (2.5/2.75)) {
                     return (7.5625*(value-=(2.25/2.75))*value + 0.9375);
-                } else {
+                } 
+                else {
                     return (7.5625*(value-=(2.625/2.75))*value + 0.984375);
                 }
             },
@@ -125,7 +144,9 @@ define(
 
             easeInOutBack: function(value) {
                 var s = 1.70158;
-                if((value/=0.5) < 1) return 0.5*(value*value*(((s*=(1.525))+1)*value -s));
+                if((value/=0.5) < 1) {
+                    return 0.5*(value*value*(((s*=(1.525))+1)*value -s));
+                }
                 return 0.5*((value-=2)*value*(((s*=(1.525))+1)*value +s) +2);
             },
 
@@ -174,7 +195,9 @@ define(
             },
 
             easeFromTo: function(value) {
-                if ((value/=0.5) < 1) return 0.5*Math.pow(value,4);
+                if ((value/=0.5) < 1) {
+                    return 0.5*Math.pow(value,4);
+                }
                 return -0.5 * ((value-=2)*Math.pow(value,3) - 2);
             },
 

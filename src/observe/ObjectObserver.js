@@ -62,7 +62,6 @@ define(
                     this._observedObject.close();
                     this._observedObject = undefined;
                 } 
-                else {}
             }
         };
 

@@ -42,7 +42,7 @@ define(
         };
 
         EventEmitter.prototype.emit = function(type) {
-            this.events = this.events || {}
+            this.events = this.events || {};
             var list = this.events[type];
             if (!list) {
                 return this;

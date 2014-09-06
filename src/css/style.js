@@ -35,7 +35,7 @@ define(
             }
 
             return null;
-        }
+        };
 
         var cssNotUnit = {
             opacity: 1
@@ -45,7 +45,7 @@ define(
             var unit = cssNotUnit[key] ? '' : 'px';
 
             element.style[key] = value + unit;
-        }
+        };
 
         return style;
     }

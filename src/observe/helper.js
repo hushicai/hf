@@ -11,9 +11,7 @@ define(
             && typeof Array.observe === 'function'; 
 
         return {
-            // hasObserve: hasObserve,
-            // for test
-            hasObserve: false,
+            hasObserve: hasObserve,
 
             diffIsEmpty: function(diff) {
                 return object.isEmpty(diff.added) 

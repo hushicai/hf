@@ -5,11 +5,13 @@
 
 define(
     function(require) {
-        function AnimationEffect() {}
+        function AnimationEffect() {
+            // nothing
+        }
 
         AnimationEffect.prototype = {
             constructor: AnimationEffect,
-            sample: function(percent) {}
+            sample: function(target, timeFraction) {}
         };
 
         return AnimationEffect;

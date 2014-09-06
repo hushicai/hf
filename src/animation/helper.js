@@ -14,7 +14,7 @@ define(
             },
 
             abstractMethod: function() {
-                throw 'abstract method.'
+                throw 'abstract method.';
             }
         };
         

@@ -5,6 +5,7 @@
 
 define(
     function(require) {
+        var curry = require('../lang/curry');
         var extend = require('../lang/extend');
         var helper = require('./helper');
         var AnimationEffect = require('./AnimationEffect');
@@ -57,24 +58,27 @@ define(
         function interpretAnimationEffect(animationEffect, target) {
             if (typeof animationEffect === 'function') {
                 return {
-                    sample: animationEffect
+                    sample: curry(animationEffect, target)
                 };
             }
             else if (animationEffect instanceof AnimationEffect) {
                 return animationEffect;
             }
             else {
-                return new KeyframeEffect(target, animationEffect);
+                return new KeyframeEffect(animationEffect);
             }
             return null;
         }
 
 
-        var Animation = function(target, animationEffect, timingInput) {
+        function Animation(target, animationEffect, timingInput) {
             this.timing = new Timing(timingInput);
 
+            // player的时间
             this._inheritedTime = null;
+            // 迭代时间
             this._iterationTime = null;
+            // 动画时间
             this._animationTime = null;
             this._player = null;
 
@@ -84,23 +88,25 @@ define(
             this.startTime = 0.0;
             this.localTime = null;
             this.endTime = this.startTime 
-                + this.timing.getActiveDuration() 
                 + this.timing.delay 
+                + this.timing.getActiveDuration() 
                 + this.timing.endDelay;
 
             this._updateTimeMarkers();
-        };
+        }
 
         Animation.prototype = {
             constructor: Animation,
 
             play: function() {
-                return this._player = new AnimationPlayer(this);
+                this._player = new AnimationPlayer(this);
+
+                return this._player;
             },
 
             _sample: function() {
                 if (helper.isDefinedAndNotNull(this.effect)) {
-                    this.effect.sample(this._timeFraction);
+                    this.effect.sample(this.target, this._timeFraction);
                 }
             },
 
@@ -233,6 +239,10 @@ define(
 
             _isPastEndOfActiveInterval: function() {
                 return this._inheritedTime >= this.endTime;
+            },
+
+            _hasFutureEffect: function() {
+                return this._isPastEndOfActiveInterval;
             }
         };
 

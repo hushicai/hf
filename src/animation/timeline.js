@@ -76,13 +76,12 @@ define(
             }
 
             for (var i = 0, len = players.length; i < len; i++) {
-                player._generateEvents();
+                players[i]._generateEvents();
             }
 
             // 删除播放完成的动画
             for (var i = 0, len = finishedPlayers.length; i < len; i++) {
-                var player = finishedPlayers[i];
-                player._deregisterFromTimeline();
+                finishedPlayers[i]._deregisterFromTimeline();
             }
 
             // 更新样式

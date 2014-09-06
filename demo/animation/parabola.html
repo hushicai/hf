@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>animation</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+div {
+    text-align: center;
+    color: #fff;
+    position: absolute;
+    padding: 3px 5px;
+}
+#test {
+    z-index: 1;
+}
+#end {
+    top: 100px;
+    left: 100px;
+    color: #666;
+}
+</style>
+</head>
+<body>
+    <div id="test" style="background: red;">1</div>
+    <div id="end" style="background: #f0f3f9;">2</div>
+    <script src="../../vendor/requirejs/require.js"></script>
+    <script>
+        require(['../../src/animation/Animation', '../../src/animation/ParabolaMathEffect'], 
+            function(Animation, ParabolaMathEffect) {
+                var animation = new Animation(
+                    document.getElementById('test'), 
+                    new ParabolaMathEffect(
+                        {
+                            endPoint: {x: 100,y: 100}
+                        }
+                    ),
+                    {duration: 1000, easing: 'easeOutBack'}
+                );
+
+                var player = animation.play();
+            }
+        );
+    </script>
+</body>
+</html>

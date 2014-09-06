@@ -14,7 +14,7 @@ div {
 }
 #test {
     top: 20px;
-    left: 100px
+    left: 50px
 }
     </style>
 </head>
@@ -26,12 +26,12 @@ div {
                 var animation = new Animation(
                     document.getElementById('test'), 
                     [
-                        {top: '20px', left: '100px'},
-                        {top: '100px', left: '100px'},
-                        {top: '100px', left: '300px'},
-                        {top: '20px', left: '300px'}
+                        {top: '20px', left: '50px'},
+                        {top: '200px', left: '50px'},
+                        {top: '200px', left: '400px'},
+                        {top: '20px', left: '400px'}
                     ],
-                    {duration: 1000, iterations: 2, direction: 'alternate'}
+                    {duration: 2000}
                 );
 
                 var player = animation.play();

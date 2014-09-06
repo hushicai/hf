@@ -6,7 +6,6 @@
 define(
     function(require) {
         var inherit = require('../lang/inherit');
-        var extend = require('../lang/extend');
         var helper = require('./helper');
         var AnimationEffect = require('./AnimationEffect');
         var style = require('../css/style');
@@ -114,11 +113,10 @@ define(
         //     {opacity: 0.5}
         // ]
         // ```
-        function KeyframeEffect(target, frames) {
+        function KeyframeEffect(frames) {
             AnimationEffect.call(this);
 
             this._keyframesDictionary = {};
-            this.target = target;
             this.setFrames(frames);
         }
 
@@ -146,20 +144,29 @@ define(
                 return this;
             },
 
-            sample: function(timeFraction) {
+            sample: function(target, timeFraction) {
                 for (var property in this._keyframesDictionary) {
-                    this.sampleForProperty(property, this._keyframesDictionary[property], timeFraction);
+                    this.sampleForProperty(target, property, this._keyframesDictionary[property], timeFraction);
                 }
             },
 
-            sampleForProperty: function(property, keyframes, timeFraction) {
+            sampleForProperty: function(target, property, keyframes, timeFraction) {
                 var startKeyframeIndex;
                 var length = keyframes.length;
 
-                for (var i = length - 1; i >= 0; i--) {
-                    if (keyframes[i].offset <= timeFraction) {
-                        startKeyframeIndex = i;
-                        break;
+                if (timeFraction < 0.0) {
+                    startKeyframeIndex = 0;
+                } 
+                else if (timeFraction >= 1.0) {
+                    // 倒数第二个，确保有endKeyframe
+                    startKeyframeIndex = length - 2;
+                } 
+                else {
+                    for (var i = length - 1; i >= 0; i--) {
+                        if (keyframes[i].offset <= timeFraction) {
+                            startKeyframeIndex = i;
+                            break;
+                        }
                     }
                 }
 
@@ -180,7 +187,7 @@ define(
                     nowValue = startKeyframe.value + (endKeyframe.value - startKeyframe.value) * f;
                 }
 
-                require('./compositor').setAnimatedValue(this.target, property, nowValue);
+                require('./compositor').setAnimatedValue(target, property, nowValue);
             }
         };
 
