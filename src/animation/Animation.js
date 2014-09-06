@@ -13,10 +13,6 @@ define(
         var AnimationPlayer = require('./AnimationPlayer');
         var timeline = require('./timeline');
 
-        var multiplyZeroGivesZero = function(a, b) {
-            return (a === 0 || b === 0) ? 0 : a * b;
-        };
-
         var presetTimingFunctions = require('./easing');
 
         var defaultTimingInput = {
@@ -71,6 +67,11 @@ define(
         }
 
 
+        /**
+         * 动画
+         * 
+         * @constructor
+         */
         function Animation(target, animationEffect, timingInput) {
             this.timing = new Timing(timingInput);
 
@@ -99,7 +100,9 @@ define(
             constructor: Animation,
 
             play: function() {
-                this._player = new AnimationPlayer(this);
+                if (!this._player) {
+                    this._player = new AnimationPlayer(this);
+                }
 
                 return this._player;
             },
@@ -167,19 +170,23 @@ define(
              * @private
              */
             _updateIterationParams: function() {
-                var adjustedAnimationTime = this._getAdjustedAnimationTime(this._animationTime);
                 var activeDuration = this.timing.getActiveDuration();
+
                 var startOffset = this.timing.iterationStart * this.timing.duration;
-                var isAtEndOfIterations = (this.timing.iterations !== 0) 
-                    && ((adjustedAnimationTime - startOffset) === activeDuration);
+                var adjustedAnimationTime = this._animationTime + startOffset;;
+                var isAtEndOfIterations = (this.timing.iterations !== 0) && (this._animationTime === activeDuration);
+
                 this.currentIteration = isAtEndOfIterations 
                     ? this._floorWithOpenClosedRange(adjustedAnimationTime, this.timing.duration) 
                     : this._floorWithClosedOpenRange(adjustedAnimationTime, this.timing.duration);
+
+                // 单次迭代时间
                 var unscaledIterationTime = isAtEndOfIterations 
                     ? this._modulusWithOpenClosedRange(adjustedAnimationTime, this.timing.duration) 
                     : this._modulusWithClosedOpenRange(adjustedAnimationTime, this.timing.duration);
-                this._iterationTime = this._scaleIterationTime(unscaledIterationTime);
 
+                // 设置方向
+                this._iterationTime = this._scaleIterationTime(unscaledIterationTime);
                 this._timeFraction = this._iterationTime / this.timing.duration;
                 var timingFunction = this.timing.timingFunction;
 
@@ -193,11 +200,6 @@ define(
                 if (this._timeFraction !== null) {
                     items.push(this);
                 }
-            },
-
-            _getAdjustedAnimationTime: function(animationTime) {
-                var startOffset = multiplyZeroGivesZero(this.timing.iterationStart, this.timing.duration);
-                return animationTime + startOffset;
             },
 
             _scaleIterationTime: function(unscaledIterationTime) {

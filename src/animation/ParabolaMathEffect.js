@@ -20,11 +20,12 @@ define(
                 var x = this.endPoint.x * timeFraction;
                 var y = this.equation(x);
 
-                require('./compositor').setAnimatedValue(target, 'left', x);
-                require('./compositor').setAnimatedValue(target, 'top', y);
+                var compositor = require('./compositor');
+                compositor.setAnimatedValue(target, 'left', x);
+                compositor.setAnimatedValue(target, 'top', y);
             },
 
-            resolveEquation: function() {
+            _resolveEquation: function() {
                 var endPoint = this.endPoint;
                 var a = 0.01;
                 var b = (endPoint.y - a * endPoint.x * endPoint.x) / endPoint.x;

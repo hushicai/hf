@@ -15,12 +15,9 @@ define(
             extend(this, effectInput);
 
             // 起点
-            this.startPoint = {
-                x: 0,
-                y: 0
-            };
+            this.startPoint = this.startPoint || {x: 0, y: 0};
 
-            this.resolveEquation();
+            this._resolveEquation();
         }
 
         MathEffect.prototype = {
@@ -28,7 +25,7 @@ define(
 
             sample: function(target, timeFraction) {},
 
-            resolveEquation: function() {}
+            _resolveEquation: function() {}
         };
 
         inherit(MathEffect, AnimationEffect);
