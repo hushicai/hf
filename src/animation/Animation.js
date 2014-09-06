@@ -87,7 +87,9 @@ define(
             this.currentIteration = null;
             this.target = target;
             this.startTime = 0.0;
+            // 动画播放时间
             this.localTime = null;
+            // 动画结束时间
             this.endTime = this.startTime 
                 + this.timing.delay 
                 + this.timing.getActiveDuration() 
@@ -174,8 +176,10 @@ define(
 
                 var startOffset = this.timing.iterationStart * this.timing.duration;
                 var adjustedAnimationTime = this._animationTime + startOffset;;
+                // 是否结束迭代
                 var isAtEndOfIterations = (this.timing.iterations !== 0) && (this._animationTime === activeDuration);
 
+                // 当前迭代次数
                 this.currentIteration = isAtEndOfIterations 
                     ? this._floorWithOpenClosedRange(adjustedAnimationTime, this.timing.duration) 
                     : this._floorWithClosedOpenRange(adjustedAnimationTime, this.timing.duration);
@@ -186,7 +190,10 @@ define(
                     : this._modulusWithClosedOpenRange(adjustedAnimationTime, this.timing.duration);
 
                 // 设置方向
-                this._iterationTime = this._scaleIterationTime(unscaledIterationTime);
+                this._iterationTime = this._isCurrentDirectionForwards()
+                    ? unscaledIterationTime
+                    : this.timing.duration - unscaledIterationTime;
+                
                 this._timeFraction = this._iterationTime / this.timing.duration;
                 var timingFunction = this.timing.timingFunction;
 
@@ -200,12 +207,6 @@ define(
                 if (this._timeFraction !== null) {
                     items.push(this);
                 }
-            },
-
-            _scaleIterationTime: function(unscaledIterationTime) {
-                return this._isCurrentDirectionForwards() 
-                    ? unscaledIterationTime 
-                    : this.timing.duration - unscaledIterationTime;
             },
 
             _floorWithClosedOpenRange: function(x, range) {
@@ -241,10 +242,6 @@ define(
 
             _isPastEndOfActiveInterval: function() {
                 return this._inheritedTime >= this.endTime;
-            },
-
-            _hasFutureEffect: function() {
-                return this._isPastEndOfActiveInterval;
             }
         };
 

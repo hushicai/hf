@@ -53,9 +53,6 @@ define(
                 }
             },
 
-            _hasFutureEffect: function() {
-                return this._animation && this._animation._hasFutureEffect();
-            },
             /**
              * 是否播放结束
              * 
