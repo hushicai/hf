@@ -32,7 +32,7 @@ define(
         // 每个属性的keyframe
         function Keyframe(options) {
             this.property = options.property;
-            this.value = options.value;
+            this.value = parseFloat(options.value, 10);
             this.offset = options.offset === undefined ? null : options.offset;
         }
 
@@ -86,14 +86,14 @@ define(
             var lastOffsetIndex = 0;
             var nextOffsetIndex = 0;
             for (var i = 1; i < frames.length - 1; i++) {
-                var keyframe = frames[i];
-                if (helper.isDefinedAndNotNull(keyframe.offset)) {
+                var frameInternal = frames[i];
+                if (helper.isDefinedAndNotNull(frameInternal.offset)) {
                     lastOffsetIndex = i;
                     continue;
                 }
                 if (i > nextOffsetIndex) {
                     nextOffsetIndex = i;
-                    while (helper.isDefinedAndNotNull(frames[nextOffsetIndex].offset)) {
+                    while (!helper.isDefinedAndNotNull(frames[nextOffsetIndex].offset)) {
                         nextOffsetIndex++;
                     }
                 }
@@ -146,18 +146,18 @@ define(
                 return this;
             },
 
-            sample: function(percent) {
+            sample: function(timeFraction) {
                 for (var property in this._keyframesDictionary) {
-                    this.sampleForProperty(this._keyframesDictionary[property], percent);
+                    this.sampleForProperty(property, this._keyframesDictionary[property], timeFraction);
                 }
             },
 
-            sampleForProperty: function(keyframes, percent) {
+            sampleForProperty: function(property, keyframes, timeFraction) {
                 var startKeyframeIndex;
                 var length = keyframes.length;
 
                 for (var i = length - 1; i >= 0; i--) {
-                    if (keyframes[i].offset <= percent) {
+                    if (keyframes[i].offset <= timeFraction) {
                         startKeyframeIndex = i;
                         break;
                     }
@@ -168,20 +168,19 @@ define(
 
                 var nowValue;
 
-                if (startKeyframe.offset === percent) {
+                if (startKeyframe.offset === timeFraction) {
                     nowValue = startKeyframe.value;
                 }
-                else if (endKeyframe.offset === percent) {
+                else if (endKeyframe.offset === timeFraction) {
                     nowValue = endKeyframe.value;
                 }
                 else {
-                    var distance = endKeyframe.value - startKeyframe.value;
-                    var delta = distance * percent;
+                    var f = (timeFraction - startKeyframe.offset) / (endKeyframe.offset - startKeyframe.offset);
 
-                    nowValue = startKeyframe.value + delta;
+                    nowValue = startKeyframe.value + (endKeyframe.value - startKeyframe.value) * f;
                 }
 
-                style.css(this.target, startKeyframe.property, nowValue);
+                require('./compositor').setAnimatedValue(this.target, property, nowValue);
             }
         };
 

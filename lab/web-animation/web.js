@@ -623,8 +623,7 @@ AnimationPlayer.prototype = {
   },
   _update: function() {
     if (this.source !== null) {
-      this.source._updateInheritedTime(
-          this.timeline.currentTime === null ? null : this._currentTime);
+      this.source._updateInheritedTime(this.timeline.currentTime === null ? null : this._currentTime);
       this._registerOnTimeline();
     }
   },
@@ -2079,7 +2078,6 @@ KeyframeEffect.prototype = createObject(AnimationEffect.prototype, {
     }
     var startKeyframe = frames[startKeyframeIndex];
     var endKeyframe = frames[startKeyframeIndex + 1];
-    console.log(startKeyframe, endKeyframe);
     if (startKeyframe.offset === timeFraction) {
       return new AddReplaceCompositableValue(startKeyframe.rawValue(),
           this._compositeForKeyframe(startKeyframe));
@@ -5221,6 +5219,7 @@ var ensureTargetCSSInitialised = function(target) {
 };
 
 var setValue = function(target, property, value) {
+    console.log(property, value);
   ensureTargetInitialised(property, target);
   property = prefixProperty(property);
   if (propertyIsSVGAttrib(property, target)) {

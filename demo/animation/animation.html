@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>animation</title>
+    <style type="text/css">
+div {
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    color: #fff;
+    position: absolute;
+}
+#test {
+    top: 20px;
+    left: 100px
+}
+    </style>
+</head>
+<body>
+    <div id="test" style="background: red;">1</div>
+    <script src="../../vendor/requirejs/require.js"></script>
+    <script>
+        require(['../../src/animation/Animation'], function(Animation) {
+                var animation = new Animation(
+                    document.getElementById('test'), 
+                    [
+                        {top: '20px', left: '100px'},
+                        {top: '100px', left: '100px'},
+                        {top: '100px', left: '300px'},
+                        {top: '20px', left: '300px'}
+                    ],
+                    {duration: 1000, iterations: 2, direction: 'alternate'}
+                );
+
+                var player = animation.play();
+        });
+    </script>
+</body>
+</html>

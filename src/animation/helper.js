@@ -11,6 +11,10 @@ define(
             },
             isDefinedAndNotNull: function(val) {
                 return helper.isDefined(val) && (val !== null);
+            },
+
+            abstractMethod: function() {
+                throw 'abstract method.'
             }
         };
         

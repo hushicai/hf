@@ -3,19 +3,26 @@
 <head>
     <meta charset="utf-8" />
     <title>web animation</title>
+    <style type="text/css">
+.pulse {
+    position: absolute;
+}
+    </style>
 </head>
 <body>
     <div class="pulse" style="width:150px;">Hello world!</div>
     <script src="./web.js"></script>
     <script>
         var elem = document.querySelector('.pulse');
-        var player = document.timeline.play(new Animation(elem, [
-            {opacity: "0.5", transform: "scale(0.5)"}, 
-            {opacity: "1.0", transform: "scale(1)"}
-        ],
-        {
-            direction: "alternate", duration: 500
-        }));
+        var animation = new Animation(elem, [
+            {top: '20px', left: '100px'},
+            {top: '200px', left: '100px'},
+            {top: '200px', left: '300px'},
+            {top: '20px', left: '300px'}
+        ], {
+            direction: "alternate-reverse", duration: 1000
+        });
+        var player = document.timeline.play(animation);
     </script>
 </body>
 </html>

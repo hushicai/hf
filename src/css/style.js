@@ -37,12 +37,12 @@ define(
             return null;
         }
 
-        var cssUnit = {
-            left: 'px'
+        var cssNotUnit = {
+            opacity: 1
         };
 
         style.css = function(element, key, value) {
-            var unit = cssUnit[key] || "";
+            var unit = cssNotUnit[key] ? '' : 'px';
 
             element.style[key] = value + unit;
         }
