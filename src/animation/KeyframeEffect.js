@@ -8,7 +8,6 @@ define(
         var inherit = require('../lang/inherit');
         var helper = require('./helper');
         var AnimationEffect = require('./AnimationEffect');
-        var style = require('../css/style');
 
         // 用以转换用户的输入
         // 输入: `{opacity: 1}`
@@ -20,7 +19,7 @@ define(
             this.properties = {};
             // 找出有效的css属性
             for (var key in options) {
-                var property = style.getCssProperty(key);
+                var property = require('../css/getProperty')(key);
 
                 if (property) {
                     this.properties[property] = options[property];

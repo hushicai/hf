@@ -17,7 +17,7 @@ define(
             applyAnimatedValues: function() {
                 for (var i = 0, len = this.items.length; i < len; i++) {
                     var item = this.items[i];
-                    require('../css/style').css(item.target, item.property, item.value);
+                    require('../css/setStyle')(item.target, item.property, item.value);
                 }
                 // 执行完清空
                 this.items = [];

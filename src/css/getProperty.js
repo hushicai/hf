@@ -1,14 +1,13 @@
 /**
- * @file css
+ * @file getProperty
  * @author hushicai(bluthcy@gmail.com)
  */
 
 define(
     function(require) {
-        var style = {};
+        var prefix = ['webkit', 'ms', 'moz', 'o', 'khtml'];
 
-        style.getCssProperty = function(property) {
-            var prefix = ['webkit', 'ms', 'moz', 'o', 'khtml'];
+        function getProperty(property) {
             var div = document.createElement('div');
 
             property = property.replace(/(^|.)-([a-z])/gi, function($0, $1, $2) {
@@ -35,18 +34,8 @@ define(
             }
 
             return null;
-        };
+        }
 
-        var cssNotUnit = {
-            opacity: 1
-        };
-
-        style.css = function(element, key, value) {
-            var unit = cssNotUnit[key] ? '' : 'px';
-
-            element.style[key] = value + unit;
-        };
-
-        return style;
+        return getProperty;
     }
 );
