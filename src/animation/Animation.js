@@ -111,7 +111,7 @@ define(
 
             _sample: function() {
                 if (helper.isDefinedAndNotNull(this.effect)) {
-                    this.effect.sample(this.target, this._timeFraction);
+                    this.effect.sample(this.target, this._timeFraction, this.currentIteration);
                 }
             },
 

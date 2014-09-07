@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>web animation</title>
+    <style type="text/css">
+.pulse {
+    position: absolute;
+}
+    </style>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+  <defs>
+    <path id=path d="M 100,100 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0"/>
+  </defs>
+</svg>
+    <div class="pulse" style="width:150px;">Hello world!</div>
+    <script src="./web.js"></script>
+    <script>
+        var elem = document.querySelector('.pulse');
+        var animFunc = new MotionPathEffect(document.querySelector('#path').pathSegList);
+        var animation = new Animation(elem, animFunc, 2000);
+        var player = document.timeline.play(animation);
+    </script>
+</body>
+</html>
