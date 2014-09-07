@@ -9,7 +9,7 @@ define(
         function setStyles(element, styles) {
             var cssText = element.style.cssText;
 
-            if (cssText[cssText.length - 1] !== ';') {
+            if (cssText && cssText[cssText.length - 1] !== ';') {
                 cssText += ";";
             }
 
