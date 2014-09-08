@@ -21,8 +21,15 @@ define(
             // 播放器的时间
             // 相对于播放器本身
             this.currentTime = 0.0;
-
             this._registerOnTimeline();
+
+            // 生成一个promise
+            var self = this;
+            this.promise = new Promise(function(resolve, reject) {
+                self._resolver = resolve;
+                self._rejecter = reject;
+            });
+
             timeline.play();
         }
 
@@ -67,10 +74,13 @@ define(
                 if (!this._finishedFlag 
                     && finished
                 ) {
+                    var currentTime = this.getCurrentTime();
                     this.emit('finish', {
-                        currentTime: this.getCurrentTime(),
+                        currentTime: currentTime,
                         timelineTime: timeline.getCurrentTime()
                     });
+
+                    this._resolver(currentTime);
                 }
 
                 this._finishedFlag = finished;

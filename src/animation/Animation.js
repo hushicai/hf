@@ -5,7 +5,6 @@
 
 define(
     function(require) {
-        var curry = require('../lang/curry');
         var extend = require('../lang/extend');
         var helper = require('./helper');
         var AnimationEffect = require('./AnimationEffect');
@@ -54,7 +53,7 @@ define(
         function interpretAnimationEffect(animationEffect, target) {
             if (typeof animationEffect === 'function') {
                 return {
-                    sample: curry(animationEffect, target)
+                    sample: animationEffect
                 };
             }
             else if (animationEffect instanceof AnimationEffect) {
@@ -65,7 +64,6 @@ define(
             }
             return null;
         }
-
 
         /**
          * 动画
