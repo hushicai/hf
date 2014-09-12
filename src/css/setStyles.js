@@ -10,11 +10,11 @@ define(
             var cssText = element.style.cssText;
 
             if (cssText && cssText[cssText.length - 1] !== ';') {
-                cssText += ";";
+                cssText += ';';
             }
 
             for (var property in styles) {
-                var css = styles[property] + unit[property] + ";";
+                var css = styles[property] + unit[property] + ';';
                 cssText += css;
             }
 

@@ -173,7 +173,7 @@ define(
                 var activeDuration = this.timing.getActiveDuration();
 
                 var startOffset = this.timing.iterationStart * this.timing.duration;
-                var adjustedAnimationTime = this._animationTime + startOffset;;
+                var adjustedAnimationTime = this._animationTime + startOffset;
                 // 是否结束迭代
                 var isAtEndOfIterations = (this.timing.iterations !== 0) && (this._animationTime === activeDuration);
 

@@ -3,6 +3,8 @@
  * @author hushicai(bluthcy@gmail.com)
  */
 
+// 动画主循环
+
 define(
     function(require) {
         function clockMillis() {
@@ -49,13 +51,13 @@ define(
             }
         };
 
-        raf(function(rafTime) {
-            timeZeroAsRafTime = rafTime;
-        });
-
         var clock = {
             start: function(tickHandler) {
                 this.tick = tickHandler;
+
+                raf(function(rafTime) {
+                    timeZeroAsRafTime = rafTime;
+                });
             },
             // 尝试重启时钟
             tryStart: function() {

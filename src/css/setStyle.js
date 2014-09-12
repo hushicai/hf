@@ -8,7 +8,7 @@ define(
         var unit = require('./unit');
 
         function setStyle(element, property, value) {
-            element.style[property] = value + unit[property] || "";
+            element.style[property] = value + unit[property] || '';
         }
 
         return setStyle;

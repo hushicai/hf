@@ -15,15 +15,15 @@ module.exports = function(grunt) {
         connect: {
             test: {
                 options: {
-                    port: 8888
+                    port: 8000
                 }
             }
         },
         express: {
             mock: {
                 options: {
-                    port: 9000,
-                    hostname: 'localhost',
+                    port: 8888,
+                    hostname: '*',
                     server: path.resolve('./server')
                 }
             }

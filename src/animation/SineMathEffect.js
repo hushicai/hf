@@ -13,8 +13,9 @@ define(
 
             this.equation = this.equation || function(x) {
                 return Math.sin(x);
-            }
+            };
         }
+
         SineMathEffect.prototype = {
             constructor: SineMathEffect,
 
