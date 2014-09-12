@@ -51,13 +51,15 @@ define(
             }
         };
 
+        // 每个tick都更新
         function tickHandler(rafTime) {
             var finished = true;
             var players = timeline.players;
             var finishedPlayers = [];
             var animations = [];
 
-            // 更新player时间
+            // 先更新时间
+            // 再计算属性
             for (var i = 0, len = players.length; i < len; i++) {
                 var player = players[i];
                 player._update();
