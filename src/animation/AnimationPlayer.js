@@ -6,6 +6,7 @@
 define(
     function(require) {
         var timeline = require('./timeline');
+        var Promise = require('../promise/index');
 
         var playerSequenceNumber = 0;
 

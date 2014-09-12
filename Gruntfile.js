@@ -33,7 +33,7 @@ module.exports = function(grunt) {
                 src: 'src/**/*.js',
                 options: {
                     outfile: 'SpecRunner.html',
-                    keepRunner: true,
+                    // keepRunner: true,
                     specs: 'test/spec/**/*.js',
                     helpers: 'test/helper/**/*.js',
                     host: 'http://localhost:<%= connect.test.options.port%>',

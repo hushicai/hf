@@ -21,9 +21,7 @@ define(
          * 
          * @inner
          */
-        var setImmediate = typeof setImmediate === 'function'
-            ? function (fn) {window.setImmediate(fn);}
-            : function (fn) {window.setTimeout(fn, 0);};
+        var setImmediate = require('../nextTick/index');
 
         /**
          * 状态转移
@@ -80,7 +78,7 @@ define(
                         transition(promise, State.FULFILLED, x);
                     }
                 }
-                catch(ex) {
+                catch (ex) {
                     transition(promise, State.REJECTED, ex);
                 }
             }
@@ -101,7 +99,7 @@ define(
             }
 
             function flush() {
-                while(promise._queue.length) {
+                while (promise._queue.length) {
                     var obj = promise._queue.shift();
                     var callback = promise.state === State.FULFILLED
                         ? obj.fulfill
@@ -112,7 +110,7 @@ define(
                             var value = callback(promise.value);
                             resolve(obj.forkedPromise, value);
                         }
-                        catch(ex) {
+                        catch (ex) {
                             transition(obj.forkedPromise, State.REJECTED, ex);
                         }
                     }

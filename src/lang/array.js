@@ -5,7 +5,7 @@
 
  define(
      function(require) {
-         var indexOf = Array.prototype.indexOf;
+         var each = require('./each');
 
          return {
              /**
@@ -14,18 +14,21 @@
               * @public
               * @return {number} index
               */
-             indexOf: indexOf
-                ? function(item, arr) {
-                    return indexOf.call(arr, item);
-                }
-                : function(item, arr) {
-                    for(var i = 0, len = array.length; i < len; i++) {
-                        if (arr[i] === item) {
-                            return i;
-                        }
-                    }
-                    return -1;
-                },
+             indexOf: function(item, arr) {
+                 if (arr.indexOf) {
+                     return arr.indexOf(item);
+                 }
+
+                 var idx = -1;
+                 each(arr, function(x, i) {
+                     if (item === x) {
+                         idx = i;
+                         return false;
+                     }
+                 });
+
+                 return idx;
+             },
 
             lastIndexOf: function() {},
 
