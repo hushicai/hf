@@ -6,6 +6,7 @@
 define(
     function(require) {
         var unit = require('./unit');
+
         function setStyles(element, styles) {
             var cssText = element.style.cssText;
 
@@ -14,7 +15,7 @@ define(
             }
 
             for (var property in styles) {
-                var css = styles[property] + unit[property] + ';';
+                var css = property + ": " + styles[property] + unit[property] + ';';
                 cssText += css;
             }
 
