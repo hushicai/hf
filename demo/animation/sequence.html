@@ -22,37 +22,39 @@ div {
 </style>
 </head>
 <body>
-    <div id="test" style="background: red; opacity: 0;">1</div>
+    <div id="test" style="background: red;">1</div>
     <script src="../../vendor/requirejs/require.js"></script>
     <script>
         require(
             [
-                '../../src/animation/Animation', 
-                '../../src/animation/AnimationSequence'
+                '../../src/dom/AnimationTarget',
+                '../../src/animation/AnimationSequence',
+                '../../src/animation/LinearMotion'
             ], 
-            function(Animation, AnimationSequence) {
-                var element = document.getElementById('test');
-                var animation1 = new Animation(
-                    element,
-                    function(target, timeFraction) {
-                        target.style.opacity = timeFraction;
-                    },
-                    {duration: 2000, iterations: 3, direction: 'alternate'}
+            function(AnimationTarget, AnimationSequence, LinearMotion) {
+                var animation1 = new LinearMotion(
+                    {x: 100, y: 100},
+                    {duration: 500, iterations: 3, direction: 'alternate'}
                 );
-                var animation2 = new Animation(
-                    element,
-                    [
-                        {left: 50, top: 50},
-                        {left: 200, top: 200},
-                        {left: 400, top: 50}
-                    ],
-                    {duration: 1000, iterations: 2, direction: "alternate"}
+                var animation2 = new LinearMotion(
+                    {x: 200, y: 50},
+                    {duration: 500, delay: 1000, endDelay: 1000, iterations: 1}
+                );
+                var animation3 = new LinearMotion(
+                    {x: 300, y: 150},
+                    {duration: 1000, iterations: 1}
                 );
 
+                var element = document.getElementById('test');
                 var sequence = new AnimationSequence([
-                    animation1,
-                    animation2
-                ]).play();
+                        animation1,
+                        animation2,
+                        animation3
+                ], {iterations: 1});
+
+                var target = new AnimationTarget(element);
+
+                target.run(sequence);
             }
         );
     </script>

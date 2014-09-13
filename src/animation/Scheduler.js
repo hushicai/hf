@@ -41,7 +41,9 @@ define(
                 }
 
                 for (var i = 0, len = finishTargets.length; i < len; i++) {
-                    this.unschedule(finishTargets[i]);
+                    var finishTarget = finishTargets[i];
+                    finishTarget.complete();
+                    this.unschedule(finishTarget);
                 }
 
                 return finished;

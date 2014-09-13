@@ -74,30 +74,40 @@ define(
         AnimationInterval.prototype = {
             constructor: AnimationInterval,
 
+            // 总的持续时间
+            getInterval: function() {
+                return this._endTime;
+            },
+
             // 更新时间
             updateTime: function(deltaTime) {
-                // 累加
                 var elapsedTime = this._elapsedTime + deltaTime;
                 // 修正
                 var activeDuration = this.timing.getActiveDuration();
                 var delay = this.timing.delay;
 
-                if (elapsedTime < delay) {
-                    elapsedTime = 0;
+                // 累积时间
+                this._elapsedTime = elapsedTime;
+
+                var animationTime = elapsedTime;
+
+                // 修正时间
+                if (animationTime < delay) {
+                    animationTime = 0;
                 } 
-                else if (elapsedTime < delay + activeDuration) {
-                    elapsedTime = elapsedTime - delay;
+                else if (animationTime < delay + activeDuration) {
+                    animationTime = animationTime - delay;
                 } 
                 else {
-                    elapsedTime = activeDuration;
+                    animationTime = activeDuration;
                 }
 
                 // 计算timeFraction
                 var duration = this.timing.duration;
                 var startOffset = this.timing.iterationStart * duration;
-                var adjustedTime = elapsedTime + startOffset;
+                var adjustedTime = animationTime + startOffset;
                 // 是否结束迭代
-                var isAtEndOfIterations = (elapsedTime === activeDuration);
+                var isAtEndOfIterations = (animationTime === activeDuration);
                 // 当前迭代次数
                 this.currentIteration = isAtEndOfIterations 
                     ? this._floorWithOpenClosedRange(adjustedTime, duration) 
@@ -107,7 +117,7 @@ define(
                     ? this._modulusWithOpenClosedRange(adjustedTime, duration) 
                     : this._modulusWithClosedOpenRange(adjustedTime, duration);
                 // 方向
-                var iterationTime = this._isCurrentDirectionForwards()
+                var iterationTime = this.isCurrentDirectionForwards()
                     ? unscaledIterationTime
                     : duration - unscaledIterationTime;
                 var t = iterationTime / duration;
@@ -118,7 +128,6 @@ define(
                 }
 
                 // 更新数据
-                this._elapsedTime = elapsedTime;
                 this._timeFraction = t;
 
                 return t;
@@ -135,6 +144,30 @@ define(
              */
             isPastEndOfInterval: function() {
                 return this._elapsedTime >= this._endTime;
+            },
+
+            /**
+             * 播放方向
+             * 
+             * @public
+             */
+            isCurrentDirectionForwards: function() {
+                var direction = this.timing.direction;
+                if (direction === 'normal') {
+                    return true;
+                }
+                if (direction === 'reverse') {
+                    return false;
+                }
+                var d = this.currentIteration;
+                if (direction === 'alternate-reverse') {
+                    d += 1;
+                }
+                return d % 2 === 0;
+            },
+
+            stop: function() {
+                this._elapsedTime = 0.0;
             },
 
             _floorWithClosedOpenRange: function(x, range) {
@@ -155,25 +188,6 @@ define(
                 var modulus = this._modulusWithClosedOpenRange(x, range);
                 var result = modulus === 0 ? range : modulus;
                 return result;
-            },
-
-            /**
-             * 播放方向
-             * 
-             * @private
-             */
-            _isCurrentDirectionForwards: function() {
-                if (this.timing.direction === 'normal') {
-                    return true;
-                }
-                if (this.timing.direction === 'reverse') {
-                    return false;
-                }
-                var d = this.currentIteration;
-                if (this.timing.direction === 'alternate-reverse') {
-                    d += 1;
-                }
-                return d % 2 === 0;
             }
         };
 

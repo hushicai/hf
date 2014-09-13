@@ -52,6 +52,11 @@ define(
                 return this;
             },
 
+            // 播放完成
+            complete: function() {
+                this._animation.stop();
+            },
+
             isFinished: function() {
                 return this._animation.isPastEndOfInterval();
             }

@@ -1,5 +1,5 @@
 /**
- * @file dom上的AnimationTarget
+ * @file AnimationTarget
  * @author hushicai(bluthcy@gmail.com)
  */
 
@@ -10,12 +10,12 @@ define(
         var getStyle = require('../css/getStyle');
         var setStyles = require('../css/setStyles');
 
-        function DomTarget(target) {
+        function DomAnimationTarget(target) {
             AnimationTarget.call(this, target);
         }
 
-        DomTarget.prototype = {
-            constructor: DomTarget,
+        DomAnimationTarget.prototype = {
+            constructor: DomAnimationTarget,
 
             composite: function(style) {
                 // 应用样式
@@ -32,8 +32,8 @@ define(
             }
         };
 
-        inherit(DomTarget, AnimationTarget);
+        inherit(DomAnimationTarget, AnimationTarget);
 
-        return DomTarget;
+        return DomAnimationTarget;
     }
 );

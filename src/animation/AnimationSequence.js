@@ -5,66 +5,74 @@
 
 define(
     function(require) {
-        var extend = require('../lang/extend');
-        var bind = require('../lang/bind');
+        var inherit = require('../lang/inherit');
+        var AnimationInterval = require('./AnimationInterval');
 
-        /**
-         * AnimationSequence
-         * @param {Array.<Animation>} animations 
-         * @param {Object} options 
-         * @param {string} options.direction 
-         * @param {number} options.iterations 
-         * 
-         * @constructor
-         */
-        function AnimationSequence(animations, options) {
-            this.animations = animations;
+        function AnimationSequence(animations, timingInput) {
+            timingInput = timingInput || {};
+            // 计算所有的animation的duration，作为AnimationSequence的duration
+            var duration = 0;
+            for (var i = 0, len = animations.length; i < len; i++) {
+                duration += animations[i].getInterval();
+            }
+            timingInput.duration = duration;
 
-            extend(this, options);
+            // 父类
+            AnimationInterval.call(this, timingInput);
 
-            this.iterations = this.iterations || 1;
-            this.currentIteration = 0;
-            this.direction = this.direction || 'normal';
-            this.index = 0;
-            this.total = this.animations.length;
+            // 计算分割点
+            var split = [];
+            var temp = 0;
+            for (var i = 0, len = animations.length; i < len; i++) {
+                var animation = animations[i];
+                temp += animation.getInterval();
+                split.push({
+                    t: temp / duration,
+                    index: i
+                });
+            }
+
+            this._split = split;
+            this._animations = animations;
+            this._currentAnimation = null;
         }
 
         AnimationSequence.prototype = {
             constructor: AnimationSequence,
 
-            play: function() {
-                var animation = this.next();
+            updateTime: function(deltaTime) {
+                this.superClass.prototype.updateTime.call(this, deltaTime);
 
-                if (animation) {
-                    animation.play().promise.then(bind(this.play, this));
+                this._previousAnimation = this._currentAnimation;
+
+                var t = this._timeFraction;
+                var idx;
+                for (var i = 0, len = this._split.length; i < len; i++) {
+                    if (t <= this._split[i].t) {
+                        idx = i;
+                        break;
+                    }
+                }
+                var split = this._split[idx];
+                this._currentAnimation = this._animations[split.index];
+
+                if (this._previousAnimation && this._currentAnimation !== this._previousAnimation) {
+                    this._previousAnimation.updateTime(deltaTime);
                 }
 
-                return this;
+                this._currentAnimation.updateTime(deltaTime);
             },
-        
-            /**
-             * 获取下一个animation
-             * 
-             * @public
-             */
-            next: function() {
-                var direction = this.direction;
 
-                switch (direction) {
-                    case 'normal':
-                        break;
-                    case 'alternate':
-                        break;
-                    default:
+            step: function(animationTarget) {
+                if (this._previousAnimation && this._currentAnimation !== this._previousAnimation) {
+                    this._previousAnimation.step(animationTarget);
+                    this._previousAnimation.stop();
                 }
-
-                if (this.index < this.total) {
-                    return this.animations[this.index++];
-                }
-
-                return null;
+                this._currentAnimation.step(animationTarget);
             }
         };
+
+        inherit(AnimationSequence, AnimationInterval);
 
         return AnimationSequence;
     }
