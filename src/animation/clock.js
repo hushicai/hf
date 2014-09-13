@@ -7,7 +7,7 @@
 
 define(
     function(require) {
-        function clockMillis() {
+        function now() {
             return +new Date();
         }
 
@@ -20,19 +20,19 @@ define(
         if (nativeRaf) {
             raf = function(callback) {
                 nativeRaf(function() {
-                    callback(clockMillis());
+                    callback(now());
                 });
             };
         } else {
             raf = function(callback) {
                 setTimeout(function() {
-                    callback(clockMillis());
+                    callback(now());
                 }, 1000 / 60);
             };
         }
 
         var timeZeroAsRafTime;
-        var timeZeroAsClockTime = clockMillis();
+        var timeZeroAsClockTime = now();
 
         var rafScheduled = false;
         var ticker = function(rafTime) {
@@ -68,16 +68,12 @@ define(
                 rafScheduled = true;
             },
 
-            clockMillis: clockMillis,
+            // 当前时间
+            now: now,
 
             // 零点
             getZeroTime: function() {
                 return timeZeroAsClockTime;
-            },
-
-            // 相对零点时间
-            relativeTime: function(time, zeroTime) {
-                return time - zeroTime;
             }
         };
 

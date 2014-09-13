@@ -3,6 +3,10 @@
  * @author hushicai(bluthcy@gmail.com)
  */
 
+// 用处：
+// promise
+// async
+
 // 还可以做得更复杂
 // 比如考虑MutationObserver
 

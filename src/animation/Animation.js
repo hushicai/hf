@@ -44,14 +44,6 @@ define(
         Animation.prototype = {
             constructor: Animation,
 
-            play: function() {
-                if (!this._player) {
-                    this._player = new AnimationPlayer(this);
-                }
-
-                return this._player;
-            },
-
             _sample: function() {
                 if (helper.isDefinedAndNotNull(this.effect)) {
                     this.effect.sample(this.target, this._timeFraction, this.currentIteration);

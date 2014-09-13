@@ -3,7 +3,7 @@
  * @author hushicai(bluthcy@gmail.com)
  */
 
-// 将一段duration拆成一个个interval
+// 持续时间
 
 define(
     function(require) {
@@ -58,118 +58,83 @@ define(
         function AnimationInterval(timingInput) {
             this.timing = new Timing(timingInput);
 
-            // player的时间
-            this._inheritedTime = null;
-            // 单次迭代时间
-            this._iterationTime = null;
-            // 动画时间
-            this._animationTime = null;
-            this._player = null;
-
-            this.currentIteration = null;
-            this.startTime = 0.0;
-            // 动画播放时间
-            this.localTime = null;
+            // 开始时间
+            this._startTime = 0.0;
+            // 已消耗的时间
+            this._elapsedTime = 0.0;
             // 动画结束时间
-            this.endTime = this.startTime 
+            this._endTime = this._startTime 
                 + this.timing.delay 
                 + this.timing.getActiveDuration() 
                 + this.timing.endDelay;
-
-            this._updateTimeMarkers();
+            // 时间片段
+            this._timeFraction = null;
         }
 
         AnimationInterval.prototype = {
             constructor: AnimationInterval,
 
-            _sample: function() {
-                return null;
-            },
+            // 更新时间
+            updateTime: function(deltaTime) {
+                // 累加
+                var elapsedTime = this._elapsedTime + deltaTime;
+                // 修正
+                var activeDuration = this.timing.getActiveDuration();
+                var delay = this.timing.delay;
 
-            _updateInheritedTime: function(inheritedTime) {
-                this._inheritedTime = inheritedTime;
-                this.localTime = inheritedTime === null ? null : (inheritedTime - this.startTime);
-                this._updateTimeMarkers();
-            },
-
-            /**
-             * 更新所有时间标志
-             * 
-             * @private
-             */
-            _updateTimeMarkers: function() {
-                if (this.localTime === null) {
-                    this._animationTime = null;
-                    this._iterationTime = null;
-                    this.currentIteration = null;
-                    this._timeFraction = null;
-                    return false;
-                }
-                this._updateAnimationTime();
-                if (this._animationTime === null) {
-                    this._iterationTime = null;
-                    this.currentIteration = null;
-                    this._timeFraction = null;
+                if (elapsedTime < delay) {
+                    elapsedTime = 0;
+                } 
+                else if (elapsedTime < delay + activeDuration) {
+                    elapsedTime = elapsedTime - delay;
                 } 
                 else {
-                    this._updateIterationParams();
+                    elapsedTime = activeDuration;
                 }
-                timeline.play();
-            },
 
-            /**
-             * 更新动画时间
-             * 
-             * @private
-             */
-            _updateAnimationTime: function() {
-                var activeDuration = this.timing.getActiveDuration();
-                if (this.localTime < this.timing.delay) {
-                    this._animationTime = 0;
-                } 
-                else if (this.localTime < this.timing.delay + activeDuration) {
-                    this._animationTime = this.localTime - this.timing.delay;
-                } 
-                else {
-                    this._animationTime = activeDuration;
-                }
-            },
-
-            /**
-             * 计算时间片段
-             * 
-             * @private
-             */
-            _updateIterationParams: function() {
-                var activeDuration = this.timing.getActiveDuration();
-
-                var startOffset = this.timing.iterationStart * this.timing.duration;
-                var adjustedAnimationTime = this._animationTime + startOffset;
+                // 计算timeFraction
+                var duration = this.timing.duration;
+                var startOffset = this.timing.iterationStart * duration;
+                var adjustedTime = elapsedTime + startOffset;
                 // 是否结束迭代
-                var isAtEndOfIterations = (this.timing.iterations !== 0) && (this._animationTime === activeDuration);
-
+                var isAtEndOfIterations = (elapsedTime === activeDuration);
                 // 当前迭代次数
                 this.currentIteration = isAtEndOfIterations 
-                    ? this._floorWithOpenClosedRange(adjustedAnimationTime, this.timing.duration) 
-                    : this._floorWithClosedOpenRange(adjustedAnimationTime, this.timing.duration);
-
+                    ? this._floorWithOpenClosedRange(adjustedTime, duration) 
+                    : this._floorWithClosedOpenRange(adjustedTime, duration);
                 // 单次迭代时间
                 var unscaledIterationTime = isAtEndOfIterations 
-                    ? this._modulusWithOpenClosedRange(adjustedAnimationTime, this.timing.duration) 
-                    : this._modulusWithClosedOpenRange(adjustedAnimationTime, this.timing.duration);
-
-                // 设置方向
-                this._iterationTime = this._isCurrentDirectionForwards()
+                    ? this._modulusWithOpenClosedRange(adjustedTime, duration) 
+                    : this._modulusWithClosedOpenRange(adjustedTime, duration);
+                // 方向
+                var iterationTime = this._isCurrentDirectionForwards()
                     ? unscaledIterationTime
-                    : this.timing.duration - unscaledIterationTime;
-                
-                this._timeFraction = this._iterationTime / this.timing.duration;
+                    : duration - unscaledIterationTime;
+                var t = iterationTime / duration;
                 var timingFunction = this.timing.timingFunction;
 
                 if (timingFunction) {
-                    this._timeFraction = timingFunction(this._timeFraction);
+                    t = timingFunction(t);
                 }
-                this._iterationTime = this._timeFraction * this.timing.duration;
+
+                // 更新数据
+                this._elapsedTime = elapsedTime;
+                this._timeFraction = t;
+
+                return t;
+            },
+
+            step: function(animationTarget) {
+                return animationTarget;
+            },
+
+            /**
+             * 是否结束
+             * 
+             * @public
+             */
+            isPastEndOfInterval: function() {
+                return this._elapsedTime >= this._endTime;
             },
 
             _floorWithClosedOpenRange: function(x, range) {
@@ -185,6 +150,7 @@ define(
                 var result = modulus < 0 ? modulus + range : modulus;
                 return result;
             },
+
             _modulusWithOpenClosedRange: function(x, range) {
                 var modulus = this._modulusWithClosedOpenRange(x, range);
                 var result = modulus === 0 ? range : modulus;
@@ -208,15 +174,6 @@ define(
                     d += 1;
                 }
                 return d % 2 === 0;
-            },
-
-            /**
-             * 时间是否已结束
-             * 
-             * @private
-             */
-            _isPastEndOfActiveInterval: function() {
-                return this._inheritedTime >= this.endTime;
             }
         };
 

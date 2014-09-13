@@ -1,7 +1,9 @@
 /**
- * @file 圆形
+ * @file AnimationSpeed
  * @author hushicai(bluthcy@gmail.com)
  */
+
+// TODO
 
 define(
     function(require) {

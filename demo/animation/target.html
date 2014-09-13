@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>target</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        div {
+            text-align: center;
+            color: #fff;
+            position: absolute;
+            padding: 3px 5px;
+        }
+        #test {
+            z-index: 1;
+            left: 0px;
+            top: 0px;
+        }
+    </style>
+</head>
+<body>
+    <div id="test" style="background: red;">1</div>
+    <script src="../../vendor/requirejs/require.js"></script>
+    <script>
+    require(
+        [
+            '../../src/dom/AnimatonTarget',
+            '../../src/animation/LinearMotion'
+        ], 
+        function(DomAnimationTarget, LinearMotion) {
+            var target = new DomAnimationTarget(
+                document.getElementById('test')
+            );
+            var motion = new LinearMotion({x: 100, y: 100}, {iterations: 1, duration: 1000});
+
+            target.run(motion);
+        }
+    );
+    </script>
+</body>
+</html>

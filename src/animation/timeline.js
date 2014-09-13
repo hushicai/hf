@@ -6,30 +6,28 @@
 define(
     function(require) {
         var clock = require('./clock');
+        var Scheduler = require('./Scheduler');
 
+        var zeroTime = clock.getZeroTime();
+        // 上一次更新时间
+        var lastUpdateTime  = clock.now();
+        // 每个tick之间的时间差
+        var deltaTime = 0.0;
+
+        // 时间轴
         var timeline = {
-            players: [],
-            startTime: clock.getZeroTime(),
+            scheduler: new Scheduler(),
 
-            /**
-             * 添加播放器
-             * 
-             * @public
-             */
-            add: function(player) {
-                this.players.push(player);
-                return this;
-            },
+            calculateDeltaTime: function() {
+                var now = clock.now();
 
-            /**
-             * 删除播放器
-             * 
-             * @public
-             */
-            remove: function(player) {
-                var idx = require('../lang/array').indexOf(this.players, player);
-                this.players.splice(idx, 1);
-                return this;
+                deltaTime = now - lastUpdateTime;
+                lastUpdateTime = now;
+
+                // 为啥要判断0.2呢？
+                // 1 / 60又是啥？
+
+                return deltaTime;
             },
 
             /**
@@ -38,7 +36,7 @@ define(
              * @public
              */
             getCurrentTime: function() {
-                return clock.relativeTime(clock.clockMillis(), this.startTime);
+                return clock.relativeTime(clock.now(), zeroTime);
             },
 
             /**
@@ -46,48 +44,16 @@ define(
              * 
              * @public
              */
-            play: function() {
+            tryPlay: function() {
                 return clock.tryStart();
             }
         };
 
         // 每个tick都更新
         function tickHandler(rafTime) {
-            var finished = true;
-            var players = timeline.players;
-            var finishedPlayers = [];
-            var animations = [];
-
-            // 先更新时间
-            // 再计算属性
-            for (var i = 0, len = players.length; i < len; i++) {
-                var player = players[i];
-                player._update();
-                
-                var isFinished = player.isFinished();
-                finished = finished && isFinished;
-                if (isFinished) {
-                    finishedPlayers.push(player);
-                }
-                player._getAnimationInEffect(animations);
-            }
-
-            // 执行每个动画
-            for (var i = 0; i < animations.length; i++) {
-                animations[i]._sample();
-            }
-
-            for (var i = 0, len = players.length; i < len; i++) {
-                players[i]._generateEvents();
-            }
-
-            // 删除播放完成的动画
-            for (var i = 0, len = finishedPlayers.length; i < len; i++) {
-                finishedPlayers[i]._deregisterFromTimeline();
-            }
-
-            // 更新样式
-            require('./compositor').applyAnimatedValues();
+            // 计算时间差
+            timeline.calculateDeltaTime();
+            var finished = timeline.scheduler.update(deltaTime);
 
             return finished;
         }
