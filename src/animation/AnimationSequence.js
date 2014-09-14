@@ -7,13 +7,13 @@ define(
     function(require) {
         var inherit = require('../lang/inherit');
         var AnimationInterval = require('./AnimationInterval');
+        var AnimationInstant = require('./AnimationInstant')
 
         function AnimationSequence(animations, timingInput) {
             timingInput = timingInput || {};
-            // 计算所有的animation的duration，作为AnimationSequence的duration
             var duration = 0;
             for (var i = 0, len = animations.length; i < len; i++) {
-                duration += animations[i].getInterval();
+                duration += animations[i].getEndTime();
             }
             timingInput.duration = duration;
 
@@ -25,10 +25,15 @@ define(
             var temp = 0;
             for (var i = 0, len = animations.length; i < len; i++) {
                 var animation = animations[i];
-                temp += animation.getInterval();
+                var time = animation.getEndTime();
+                if (time === 0) {
+                    continue;
+                }
+                temp += time;
                 split.push({
                     t: temp / duration,
-                    index: i
+                    index: i,
+                    time: time
                 });
             }
             this._split = split;
@@ -61,20 +66,53 @@ define(
                 var index = split.index;
                 var deltaTime = this.getDeltaTime();
 
-                if (this._current !== null && this._current !== index) {
+                if (this._current !== index) {
                     var prevAniamtion = this._animations[this._current];
-                    prevAniamtion.update(deltaTime);
-                    prevAniamtion.stop();
+                    if (prevAniamtion) {
+                        prevAniamtion.update(deltaTime);
+                        prevAniamtion.stop();
+                    }
+                    this._runInstant(this._current, index);
                 }
 
                 var currentAnimation = this._animations[index];
+                // 如果是第一次执行，绑定target？
                 currentAnimation.update(deltaTime);
 
-                if (this.isPastEndOfInterval()) {
+                if (this.isEnded()) {
                     currentAnimation.stop();
+
+                    this._runInstant(this._current);
                 }
 
                 this._current = index;
+            },
+
+            _runInstant: function(start, end) {
+                var animations = this._animations;
+                var len = animations.length;
+                var factor;
+
+                if (this.isCurrentDirectionForwards()) {
+                    start = start === null ? 0 : start;
+                    end = end === undefined ? len - 1 : end;
+                }
+                else {
+                    start = start === null ? len - 1 : start;
+                    end = end === undefined ? 0 : end;
+                    // 交换一下start、end
+                    var temp = start;
+                    start = end;
+                    end = temp;
+                }
+
+                for (var i = start; i <= end; i++) {
+                    var temp = animations[i];
+                    if (temp instanceof AnimationInstant) {
+                        temp.update();
+                        temp.stop();
+                    }
+                }
             }
         };
 

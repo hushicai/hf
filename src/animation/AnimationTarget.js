@@ -58,7 +58,7 @@ define(
             },
 
             isFinished: function() {
-                return this._animation.isPastEndOfInterval();
+                return this._animation.isEnded();
             }
         };
 

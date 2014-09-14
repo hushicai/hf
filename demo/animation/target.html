@@ -28,13 +28,13 @@
     require(
         [
             '../../src/dom/AnimationTarget',
-            '../../src/animation/LinearMotion'
+            '../../src/animation/effect/Move'
         ], 
-        function(DomAnimationTarget, LinearMotion) {
+        function(DomAnimationTarget, Move) {
             var target = new DomAnimationTarget(
                 document.getElementById('test')
             );
-            var motion = new LinearMotion({x: 100, y: 100}, {delay: 1000, iterations: 1, duration: 1000});
+            var motion = new Move({x: 100, y: 100}, {delay: 1000, iterations: 1, duration: 1000});
 
             target.run(motion);
         }

@@ -29,28 +29,36 @@ div {
             [
                 '../../src/dom/AnimationTarget',
                 '../../src/animation/AnimationSequence',
-                '../../src/animation/LinearMotion'
+                '../../src/animation/effect/Move',
+                '../../src/animation/AnimationInstant'
             ], 
-            function(AnimationTarget, AnimationSequence, LinearMotion) {
-                var animation1 = new LinearMotion(
+            function(AnimationTarget, AnimationSequence, Move, AnimationInstant) {
+                var b = new AnimationInstant(function() {console.log('粉墨登场...')});
+                var animation1 = new Move(
                     {x: 100, y: 100},
-                    {duration: 500, iterations: 3, direction: 'alternate'}
+                    {duration: 1000, iterations: 3, direction: 'alternate'}
                 );
-                var animation2 = new LinearMotion(
+                var z1 = new AnimationInstant(function() {console.log('转个弯...')});
+                var animation2 = new Move(
                     {x: 200, y: 50},
-                    {duration: 500, delay: 1000, iterations: 1}
+                    {duration: 1000, iterations: 1}
                 );
-                var animation3 = new LinearMotion(
+                var z2 = new AnimationInstant(function() {console.log('我再转...')});
+                var animation3 = new Move(
                     {x: 300, y: 150},
                     {duration: 1000, iterations: 1}
                 );
-
+                var end = new  AnimationInstant(function() {console.log('结束!')});
                 var element = document.getElementById('test');
                 var sequence = new AnimationSequence([
+                        b,
                         animation1,
+                        z1,
                         animation2,
-                        animation3
-                ], {iterations: 1});
+                        z2,
+                        animation3,
+                        end
+                ], {});
 
                 var target = new AnimationTarget(element);
 

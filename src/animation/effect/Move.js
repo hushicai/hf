@@ -1,27 +1,28 @@
 /**
- * @file x、y方向上的线性运动
+ * @file Move
  * @author hushicai(bluthcy@gmail.com)
  */
 
 define(
     function(require) {
-        "use strict";
-
-        var inherit = require('../lang/inherit');
-        var Motion = require('./Motion');
+        var inherit = require('../../lang/inherit');
+        var extend = require('../../lang/extend');
+        var AnimationInterval = require('../AnimationInterval');
 
         // 输入：
         // ```javascript
         //    {x: 100, y: 100}
         // ```
-        function LinearMotion(motionInput, timingInput) {
-            Motion.apply(this, arguments);
+        function Move(moveInput, timingInput) {
+            AnimationInterval.call(this, timingInput);
+
+            extend(this, moveInput);
 
             this._origin = null;
         }
 
-        LinearMotion.prototype = {
-            constructor: LinearMotion,
+        Move.prototype = {
+            constructor: Move,
 
             step: function(t) {
                 var animationTarget = this._target;
@@ -40,8 +41,8 @@ define(
             }
         };
 
-        inherit(LinearMotion, Motion);
+        inherit(Move, AnimationInterval);
 
-        return LinearMotion;
+        return Move;
     }
 );
