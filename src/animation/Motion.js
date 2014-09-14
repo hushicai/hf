@@ -23,8 +23,8 @@ define(
              * 
              * @public
              */
-            step: function(animationTarget) {
-                return animationTarget;
+            step: function(t) {
+                return t;
             }
         };
 

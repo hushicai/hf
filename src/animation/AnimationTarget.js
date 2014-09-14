@@ -22,9 +22,7 @@ define(
 
             update: function(deltaTime) {
                 // 计算时间
-                this._animation.updateTime(deltaTime);
-                // 计算样式
-                this._animation.step(this);
+                this._animation.update(deltaTime);
             },
 
             getPosition: function() {
@@ -45,6 +43,8 @@ define(
              */
             run: function(animation) {
                 this._animation = animation;
+
+                this._animation.attach(this);
 
                 timeline.scheduler.schedule(this);
                 timeline.tryPlay();

@@ -23,8 +23,8 @@ define(
         LinearMotion.prototype = {
             constructor: LinearMotion,
 
-            step: function(animationTarget) {
-                var t = this._timeFraction;
+            step: function(t) {
+                var animationTarget = this._target;
 
                 // 初始位置
                 if (!this._origin) {

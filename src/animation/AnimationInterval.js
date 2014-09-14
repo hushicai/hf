@@ -50,6 +50,8 @@ define(
             }
         };
 
+        var getGuid = require('../lang/getGuid');
+
         /**
          * AnimationInterval
          * 
@@ -57,6 +59,8 @@ define(
          */
         function AnimationInterval(timingInput) {
             this.timing = new Timing(timingInput);
+
+            this.guid = getGuid('animation_interval');
 
             // 开始时间
             this._startTime = 0.0;
@@ -67,8 +71,8 @@ define(
                 + this.timing.delay 
                 + this.timing.getActiveDuration() 
                 + this.timing.endDelay;
-            // 时间片段
-            this._timeFraction = null;
+            this._deltaTime = 0.0;
+            this._target = null;
         }
 
         AnimationInterval.prototype = {
@@ -79,8 +83,27 @@ define(
                 return this._endTime;
             },
 
+            getElapsedTime: function() {
+                return this._elapsedTime;
+            },
+
+            getDeltaTime: function() {
+                return this._deltaTime;
+            },
+
+            attach: function(animationTarget) {
+                this._target = animationTarget;
+            },
+
+            stop: function() {
+                this._elapsedTime = 0.0;
+                this._target = null;
+
+                console.log('stop', this.guid);
+            },
+
             // 更新时间
-            updateTime: function(deltaTime) {
+            update: function(deltaTime) {
                 var elapsedTime = this._elapsedTime + deltaTime;
                 // 修正
                 var activeDuration = this.timing.getActiveDuration();
@@ -88,6 +111,7 @@ define(
 
                 // 累积时间
                 this._elapsedTime = elapsedTime;
+                this._deltaTime = deltaTime;
 
                 var animationTime = elapsedTime;
 
@@ -127,14 +151,13 @@ define(
                     t = timingFunction(t);
                 }
 
-                // 更新数据
-                this._timeFraction = t;
+                this.step(t);
 
                 return t;
             },
 
-            step: function(animationTarget) {
-                return animationTarget;
+            step: function(t) {
+                return t;
             },
 
             /**
@@ -164,10 +187,6 @@ define(
                     d += 1;
                 }
                 return d % 2 === 0;
-            },
-
-            stop: function() {
-                this._elapsedTime = 0.0;
             },
 
             _floorWithClosedOpenRange: function(x, range) {

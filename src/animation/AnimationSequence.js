@@ -31,21 +31,24 @@ define(
                     index: i
                 });
             }
-
             this._split = split;
+
             this._animations = animations;
-            this._currentAnimation = null;
+            this._current = null;
         }
 
         AnimationSequence.prototype = {
             constructor: AnimationSequence,
 
-            updateTime: function(deltaTime) {
-                this.superClass.prototype.updateTime.call(this, deltaTime);
+            attach: function(animationTarget) {
+                this.superClass.prototype.attach.call(this, animationTarget);
 
-                this._previousAnimation = this._currentAnimation;
+                for (var i = 0, len = this._animations.length; i < len; i++) {
+                    this._animations[i].attach(animationTarget);
+                }
+            },
 
-                var t = this._timeFraction;
+            step: function(t) {
                 var idx;
                 for (var i = 0, len = this._split.length; i < len; i++) {
                     if (t <= this._split[i].t) {
@@ -53,22 +56,25 @@ define(
                         break;
                     }
                 }
+
                 var split = this._split[idx];
-                this._currentAnimation = this._animations[split.index];
+                var index = split.index;
+                var deltaTime = this.getDeltaTime();
 
-                if (this._previousAnimation && this._currentAnimation !== this._previousAnimation) {
-                    this._previousAnimation.updateTime(deltaTime);
+                if (this._current !== null && this._current !== index) {
+                    var prevAniamtion = this._animations[this._current];
+                    prevAniamtion.update(deltaTime);
+                    prevAniamtion.stop();
                 }
 
-                this._currentAnimation.updateTime(deltaTime);
-            },
+                var currentAnimation = this._animations[index];
+                currentAnimation.update(deltaTime);
 
-            step: function(animationTarget) {
-                if (this._previousAnimation && this._currentAnimation !== this._previousAnimation) {
-                    this._previousAnimation.step(animationTarget);
-                    this._previousAnimation.stop();
+                if (this.isPastEndOfInterval()) {
+                    currentAnimation.stop();
                 }
-                this._currentAnimation.step(animationTarget);
+
+                this._current = index;
             }
         };
 
