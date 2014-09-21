@@ -29,11 +29,12 @@ div {
             [
                 '../../src/dom/AnimationTarget',
                 '../../src/animation/AnimationSequence',
+                '../../src/animation/AnimationInstant',
                 '../../src/animation/effect/Move',
-                '../../src/animation/AnimationInstant'
+                '../../src/animation/effect/FadeOut',
             ], 
-            function(AnimationTarget, AnimationSequence, Move, AnimationInstant) {
-                var b = new AnimationInstant(function() {console.log('粉墨登场...')});
+            function(AnimationTarget, AnimationSequence, AnimationInstant, Move, FadeOut) {
+                var b = new AnimationInstant(function() {console.log('闪亮登场...')});
                 var animation1 = new Move(
                     {x: 100, y: 100},
                     {duration: 1000, iterations: 3, direction: 'alternate'}
@@ -41,14 +42,19 @@ div {
                 var z1 = new AnimationInstant(function() {console.log('转个弯...')});
                 var animation2 = new Move(
                     {x: 200, y: 50},
-                    {duration: 1000, iterations: 1}
+                    {duration: 1000, iterations: 3, direction: "alternate"}
                 );
                 var z2 = new AnimationInstant(function() {console.log('我再转...')});
                 var animation3 = new Move(
                     {x: 300, y: 150},
-                    {duration: 1000, iterations: 1}
+                    {duration: 1000, iterations: 3, direction: "alternate"}
                 );
-                var end = new  AnimationInstant(function() {console.log('结束!')});
+                var z3 = new AnimationInstant(function() {console.log('遭到攻击，警报，警报...');});
+                var animation4 = new FadeOut(
+                    {opacity: 0},
+                    {duration: 2000}
+                );
+                var end = new AnimationInstant(function() {console.log('都教授救我！！！')});
                 var element = document.getElementById('test');
                 var sequence = new AnimationSequence([
                         b,
@@ -57,6 +63,8 @@ div {
                         animation2,
                         z2,
                         animation3,
+                        z3,
+                        animation4,
                         end
                 ], {});
 

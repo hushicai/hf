@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>MultiWayTree</title>
+</head>
+<body>
+    <script src="../../vendor/requirejs/require.js"></script>
+    <script>
+        require(['../../src/data/MultiWayTree'], function(MultiWayTree) {
+            var data = [
+                {
+                    name: "1111",
+                    value: 1,
+                    children: [
+                        {
+                            name: "1111c1",
+                            value: 11
+                        },
+                        {
+                            name: '1111c2',
+                            value: 12,
+                            children: [
+                                {
+                                    name: '1111c2c1',
+                                    value: 121
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: '2222',
+                    value: 2
+                }
+            ];
+            var tree = new MultiWayTree(data);
+
+            var sub = tree.wfs(12);
+
+            console.log(sub);
+        });
+    </script>
+</body>
+</html>

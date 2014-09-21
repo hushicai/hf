@@ -12,7 +12,6 @@ define(
         var AnimationInterval = require('./AnimationInterval');
         var AnimationEffect = require('./AnimationEffect');
         var KeyframeEffect = require('./KeyframeEffect');
-        var AnimationPlayer = require('./AnimationPlayer');
 
         function interpretAnimationEffect(animationEffect, target) {
             if (typeof animationEffect === 'function') {

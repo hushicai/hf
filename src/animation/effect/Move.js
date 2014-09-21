@@ -18,6 +18,9 @@ define(
 
             extend(this, moveInput);
 
+            this._startX = null;
+            this._startY = null;
+
             this._origin = null;
         }
 
@@ -28,14 +31,14 @@ define(
                 var animationTarget = this._target;
 
                 // 初始位置
-                if (!this._origin) {
-                    this._origin = animationTarget.getPosition();
+                if (!this._startX || !this._startY) {
+                    this._startX = animationTarget.getPropertyValue('x');
+                    this._startY = animationTarget.getPropertyValue('y');
                 }
-                var origin = this._origin;
                 var style = {};
 
-                style.x = origin.x + (this.x - origin.x) * t;
-                style.y = origin.y + (this.y - origin.y) * t;
+                style.x = this._startX + (this.x - this._startX) * t;
+                style.y = this._startY + (this.y - this._startY) * t;
 
                 animationTarget.composite(style);
             }

@@ -15,7 +15,7 @@ define(
             }
 
             for (var property in styles) {
-                var css = property + ": " + styles[property] + unit[property] + ';';
+                var css = property + ': ' + styles[property] + unit[property] + ';';
                 cssText += css;
             }
 

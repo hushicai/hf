@@ -8,7 +8,7 @@ define(
         var uid = 0;
 
         var getGuid = function(prefix) {
-            return 'hf_' + (prefix ? prefix + '_' : '') + (++uid);
+            return '_hf_' + (prefix ? prefix + '_' : '') + (++uid) + '_';
         };
 
         return getGuid;

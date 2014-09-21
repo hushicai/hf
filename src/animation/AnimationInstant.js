@@ -21,7 +21,6 @@ define(
             constructor: AnimationInstant,
 
             update: function(deltaTime) {
-                this._timeFraction = 1;
                 this.step(1);
                 return 1;
             },

@@ -5,10 +5,6 @@
 
 define(
     function(require) {
-        var extend = require('../lang/extend');
-        var bind = require('../lang/bind');
-        var timeline = require('./timeline');
-
         var getGuid = require('../lang/getGuid');
 
         /**

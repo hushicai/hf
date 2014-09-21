@@ -80,8 +80,6 @@ define(
                     t = timingFunction(t);
                 }
 
-                this._timeFraction = t;
-
                 this.step(t);
 
                 return t;

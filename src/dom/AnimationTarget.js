@@ -10,6 +10,11 @@ define(
         var getStyle = require('../css/getStyle');
         var setStyles = require('../css/setStyles');
 
+        var propMap = {
+            x: 'left',
+            y: 'top'
+        };
+
         function DomAnimationTarget(target) {
             AnimationTarget.call(this, target);
         }
@@ -18,17 +23,24 @@ define(
             constructor: DomAnimationTarget,
 
             composite: function(style) {
+                for (var key in style) {
+                    var prop = this.normalize(key);
+                    if (prop !== key) {
+                        style[prop] = style[key];
+                        delete style[key];
+                    }
+                }
                 // 应用样式
-                setStyles(this._node, {left: style.x, top: style.y});
+                setStyles(this._node, style);
             },
 
-            getPosition: function() {
-                var pos = {};
+            getPropertyValue: function(prop) {
+                prop = this.normalize(prop);
+                return getStyle(this._node, prop);
+            },
 
-                pos.x = getStyle(this._node, 'left');
-                pos.y = getStyle(this._node, 'top');
-
-                return pos;
+            normalize: function(prop) {
+                return  propMap[prop] || prop;
             }
         };
 

@@ -7,7 +7,7 @@ define(
     function(require) {
         var inherit = require('../lang/inherit');
         var AnimationInterval = require('./AnimationInterval');
-        var AnimationInstant = require('./AnimationInstant')
+        var AnimationInstant = require('./AnimationInstant');
 
         function AnimationSequence(animations, timingInput) {
             timingInput = timingInput || {};
@@ -37,7 +37,6 @@ define(
                 });
             }
             this._split = split;
-
             this._animations = animations;
             this._current = null;
         }
@@ -76,12 +75,10 @@ define(
                 }
 
                 var currentAnimation = this._animations[index];
-                // 如果是第一次执行，绑定target？
                 currentAnimation.update(deltaTime);
 
                 if (this.isEnded()) {
                     currentAnimation.stop();
-
                     this._runInstant(this._current);
                 }
 
@@ -91,7 +88,6 @@ define(
             _runInstant: function(start, end) {
                 var animations = this._animations;
                 var len = animations.length;
-                var factor;
 
                 if (this.isCurrentDirectionForwards()) {
                     start = start === null ? 0 : start;
@@ -113,6 +109,12 @@ define(
                         temp.stop();
                     }
                 }
+            },
+
+            stop: function() {
+                this.superClass.prototype.stop.call(this);
+
+                this._current = null;
             }
         };
 

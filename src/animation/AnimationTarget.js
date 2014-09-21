@@ -25,9 +25,7 @@ define(
                 this._animation.update(deltaTime);
             },
 
-            getPosition: function() {
-                return {x: 0, y: 0};
-            },
+            getPropertyValue: function(prop) {},
 
             // 应用样式
             composite: function(styles) {
